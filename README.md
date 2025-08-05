@@ -90,9 +90,6 @@ http://localhost:5173
 - LinkedIn: [Zeki Akgül](https://www.linkedin.com/in/zeki-akgül)
 - E-posta: zekiakgul09@gmail.com
 
-## 📄 Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır.
 
 ## 🤝 Katkıda Bulunma
 
