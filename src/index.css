@@ -1,69 +1,155 @@
-body {
-  font-family: 'Inter', 'Roboto', 'Open Sans', Arial, sans-serif;
-  background: #f7f8fa;
-  color: #222;
-  margin: 0;
-  padding: 0;
-  scroll-behavior: smooth;
-  scroll-padding-top: 80px;
+/* Global Styles */
+:root {
+  --bg-primary: #f7f8fa;
+  --bg-secondary: #fff;
+  --text-primary: #222;
+  --text-secondary: #444;
+  --text-muted: #666;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.07);
+  --shadow-color-hover: rgba(0, 0, 0, 0.12);
 }
 
+.dark-theme {
+  --bg-primary: #121212;
+  --bg-secondary: #1a1a1a;
+  --text-primary: #fff;
+  --text-secondary: #ccc;
+  --text-muted: #888;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --shadow-color-hover: rgba(0, 0, 0, 0.4);
+}
+
+/* Reset scroll behavior */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Inter', 'Roboto', 'Open Sans', Arial, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
   max-width: 800px;
   margin: 40px auto;
   padding: 24px;
-  background: #fff;
+  background: var(--bg-secondary);
   border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  box-shadow: 0 4px 24px var(--shadow-color);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Typography */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 2rem 0 1rem;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 1.5rem 0 1rem;
+}
+
+p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 1rem 0;
+}
+
+/* Links */
 a {
   color: #007bff;
   text-decoration: none;
   transition: color 0.2s;
 }
+
 a:hover {
   color: #0056b3;
 }
 
-@media (max-width: 900px) {
-  .container {
-    max-width: 98vw;
-    padding: 10px;
+/* Responsive Typography */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    position: relative;
+    height: 100%;
   }
-}
-@media (max-width: 600px) {
+
   .container {
-    padding: 4px;
-    border-radius: 0;
-    box-shadow: none;
+    padding: 16px;
+    margin: 20px auto;
+    border-radius: 12px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  p {
+    font-size: 1rem;
   }
 }
 
-.comment-card {
-  background: #f5f7fa;
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
-  transition: box-shadow 0.2s;
-}
-.comment-card:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.09);
-}
-
-.skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
-  background-size: 400% 100%;
-  animation: skeleton-loading 1.2s ease-in-out infinite;
-  border-radius: 8px;
-}
-@keyframes skeleton-loading {
-  0% { background-position: 100% 50%; }
-  100% { background-position: 0 50%; }
+/* Prevent scroll issues on iOS */
+@supports (-webkit-overflow-scrolling: touch) {
+  body {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+  }
+  
+  #root {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+  }
 }

@@ -1,133 +1,330 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import axios from "axios";
 
 const PostDetailPage = () => {
   const { id } = useParams();
-
   const [post, setPost] = useState(null);
-  const [comments, setComments] = useState([]);
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [comments, setComments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Avatar bileşeni
+  const Avatar = ({
+    email,
+    isAuthor = false,
+    userId = null,
+    size = 32,
+    fontSize = 14,
+  }) => {
+    // Email'den baş harfi al
+    const getInitial = (email) => {
+      const atIndex = email.indexOf("@");
+      if (atIndex > 0) {
+        return email.substring(0, atIndex).split("_")[0][0].toUpperCase();
+      }
+      return email[0].toUpperCase();
+    };
+
+    const avatarStyle = {
+      width: `${size}px`,
+      height: `${size}px`,
+      borderRadius: "50%",
+      background: "linear-gradient(135deg, #00c6ff 60%, #0072ff 100%)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: "#fff",
+      fontSize: `${fontSize}px`,
+      fontWeight: "bold",
+      flexShrink: 0,
+      cursor: isAuthor ? "pointer" : "default",
+      transition: isAuthor
+        ? "transform 0.2s ease, box-shadow 0.2s ease"
+        : "none",
+    };
+
+    const AvatarContent = () => (
+      <div
+        style={avatarStyle}
+        onMouseOver={(e) => {
+          if (isAuthor) {
+            e.currentTarget.style.transform = "scale(1.1)";
+            e.currentTarget.style.boxShadow =
+              "0 2px 8px rgba(0, 198, 255, 0.4)";
+          }
+        }}
+        onMouseOut={(e) => {
+          if (isAuthor) {
+            e.currentTarget.style.transform = "scale(1)";
+            e.currentTarget.style.boxShadow = "none";
+          }
+        }}
+      >
+        {getInitial(email)}
+      </div>
+    );
+
+    return isAuthor ? (
+      <Link to={`/users/${userId}`} style={{ textDecoration: "none" }}>
+        <AvatarContent />
+      </Link>
+    ) : (
+      <AvatarContent />
+    );
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const postResponse = await axios.get(
           `https://jsonplaceholder.typicode.com/posts/${id}`
         );
-        const commentsResponse = await axios.get(
-          `https://jsonplaceholder.typicode.com/posts/${id}/comments`
-        );
-
         setPost(postResponse.data);
-        setComments(commentsResponse.data);
 
-        const userId = postResponse.data.userId;
-        const userResponse = await axios.get(
-          `https://jsonplaceholder.typicode.com/users/${userId}`
-        );
+        const [userResponse, commentsResponse] = await Promise.all([
+          axios.get(
+            `https://jsonplaceholder.typicode.com/users/${postResponse.data.userId}`
+          ),
+          axios.get(
+            `https://jsonplaceholder.typicode.com/posts/${id}/comments`
+          ),
+        ]);
+
         setUser(userResponse.data);
+        setComments(commentsResponse.data);
       } catch (error) {
-        console.error("Detay verilerini çekerken hata oluştu:", error);
+        console.error("Error fetching data:", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
+
     fetchData();
   }, [id]);
 
-  if (!post) {
-    return <div>Yazı bulunamadı</div>;
+  if (isLoading) {
+    return (
+      <div className="container" style={{ marginTop: 32, marginBottom: 32 }}>
+        <div
+          style={{
+            textAlign: "center",
+            padding: "40px 20px",
+            color: "var(--text-secondary)",
+            background: "var(--bg-secondary)",
+            borderRadius: "10px",
+            margin: "20px auto",
+            maxWidth: "400px",
+            boxShadow: "0 2px 12px var(--shadow-color)",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "1.2rem",
+              fontWeight: "500",
+              marginBottom: "10px",
+            }}
+          >
+            Yazı Detayları Yükleniyor...
+          </div>
+          <div
+            style={{
+              width: "40px",
+              height: "40px",
+              margin: "10px auto",
+              border: "3px solid var(--text-muted)",
+              borderTop: "3px solid var(--text-primary)",
+              borderRadius: "50%",
+              animation: "spin 1s linear infinite",
+            }}
+          />
+        </div>
+        <style>
+          {`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}
+        </style>
+      </div>
+    );
   }
+
+  if (!post || !user) return null;
 
   return (
     <div className="container" style={{ marginTop: 32, marginBottom: 32 }}>
+      {/* Blog Yazısı */}
       <div
         style={{
-          background: "#fff",
-          borderRadius: 18,
-          boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+          background: "var(--bg-secondary)",
+          borderRadius: "18px",
+          boxShadow: "0 2px 12px var(--shadow-color)",
           padding: "32px 28px",
-          marginBottom: 32,
+          marginBottom: "32px",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <h1 style={{ fontWeight: 800, fontSize: "2.2rem", marginBottom: 12 }}>
-          {post.title}
-        </h1>
-        {user && (
-          <div style={{ marginBottom: 18 }}>
-            <Link
-              to={`/users/${user.id}`}
-              style={{
-                display: "inline-block",
-                background: "linear-gradient(90deg, #007bff 60%, #00c6ff 100%)",
-                color: "#fff",
-                fontWeight: 700,
-                fontSize: "1.05rem",
-                padding: "8px 22px",
-                borderRadius: 8,
-                textDecoration: "none",
-                boxShadow: "0 2px 8px rgba(0,123,255,0.08)",
-                transition: "background 0.2s, color 0.2s",
-              }}
-              onMouseOver={(e) =>
-                (e.currentTarget.style.background =
-                  "linear-gradient(90deg, #0056b3 60%, #007bff 100%)")
-              }
-              onMouseOut={(e) =>
-                (e.currentTarget.style.background =
-                  "linear-gradient(90deg, #007bff 60%, #00c6ff 100%)")
-              }
-            >
-              Yazarı Gör: {user.name}
-            </Link>
-          </div>
-        )}
         <div
           style={{
-            fontSize: "1.15rem",
-            color: "#222",
-            lineHeight: 1.7,
-            marginBottom: 18,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "4px",
+            background: "linear-gradient(90deg, #007bff 0%, #00c6ff 100%)",
+          }}
+        />
+        <h1
+          style={{
+            fontSize: "2.5rem",
+            fontWeight: "800",
+            marginBottom: "24px",
+            color: "var(--text-primary)",
+            lineHeight: "1.3",
+          }}
+        >
+          {post.title}
+        </h1>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "24px",
+            padding: "8px 12px",
+            background: "var(--bg-primary)",
+            borderRadius: "8px",
+            width: "fit-content",
+          }}
+        >
+          <Avatar email={user.email} isAuthor={true} userId={user.id} />
+          <Link
+            to={`/users/${user.id}`}
+            style={{
+              color: "var(--text-primary)",
+              textDecoration: "none",
+              fontSize: "0.95rem",
+              fontWeight: "500",
+              transition: "color 0.2s ease",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+              marginLeft: "10px",
+            }}
+            onMouseOver={(e) => (e.currentTarget.style.color = "#007bff")}
+            onMouseOut={(e) =>
+              (e.currentTarget.style.color = "var(--text-primary)")
+            }
+          >
+            {user.name}
+            <span
+              style={{
+                fontSize: "0.8rem",
+                color: "var(--text-muted)",
+              }}
+            >
+              • Yazar Profili
+            </span>
+          </Link>
+        </div>
+        <div
+          style={{
+            fontSize: "1.2rem",
+            lineHeight: "1.8",
+            color: "var(--text-secondary)",
+            marginBottom: "24px",
           }}
         >
           {post.body}
         </div>
       </div>
 
-      <div style={{ marginTop: 24 }}>
-        <h3 style={{ fontWeight: 700, fontSize: "1.2rem", marginBottom: 18 }}>
-          Yorumlar ({comments.length})
-        </h3>
-        <div className="comment-list">
+      {/* Yorumlar Bölümü */}
+      <div
+        style={{
+          background: "var(--bg-secondary)",
+          borderRadius: "18px",
+          boxShadow: "0 2px 12px var(--shadow-color)",
+          padding: "32px 28px",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "1.8rem",
+            fontWeight: "700",
+            marginBottom: "24px",
+            color: "var(--text-primary)",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+          }}
+        >
+          Yorumlar
+          <span
+            style={{
+              fontSize: "1rem",
+              color: "var(--text-muted)",
+              fontWeight: "500",
+            }}
+          >
+            ({comments.length})
+          </span>
+        </h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {comments.map((comment) => (
             <div
               key={comment.id}
-              className="comment-card"
               style={{
-                background: "#f5f7fa",
-                borderRadius: 10,
-                padding: "16px 18px",
-                marginBottom: 16,
-                boxShadow: "0 1px 6px rgba(0,0,0,0.04)",
+                background: "var(--bg-primary)",
+                padding: "20px",
+                borderRadius: "12px",
+                border: "1px solid var(--border-color)",
               }}
             >
-              <div style={{ fontWeight: 700, color: "#111", marginBottom: 4 }}>
-                {comment.name}{" "}
-                <span
-                  style={{
-                    fontWeight: 400,
-                    color: "#888",
-                    fontSize: "0.98rem",
-                  }}
-                >
-                  ({comment.email})
-                </span>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "12px",
+                  gap: "12px",
+                }}
+              >
+                <Avatar email={comment.email} />
+                <div style={{ flex: 1 }}>
+                  <h3
+                    style={{
+                      fontSize: "1.1rem",
+                      fontWeight: "600",
+                      color: "var(--text-primary)",
+                      margin: 0,
+                      marginBottom: "4px",
+                    }}
+                  >
+                    {comment.name}
+                  </h3>
+                  <span
+                    style={{
+                      color: "var(--text-muted)",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    {comment.email}
+                  </span>
+                </div>
               </div>
-              <div style={{ color: "#222", fontSize: "1.05rem" }}>
+              <p
+                style={{
+                  margin: 0,
+                  color: "var(--text-secondary)",
+                  lineHeight: "1.6",
+                  fontSize: "1rem",
+                }}
+              >
                 {comment.body}
-              </div>
+              </p>
             </div>
           ))}
         </div>

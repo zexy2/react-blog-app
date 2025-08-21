@@ -1,84 +1,243 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import PostCard from "../components/PostCard/PostCard";
 
 const UserPage = () => {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+    const fetchUserData = async () => {
       try {
-        const userResponse = await axios.get(
-          `https://jsonplaceholder.typicode.com/users/${id}`
-        );
-        const postsResponse = await axios.get(
-          `https://jsonplaceholder.typicode.com/posts?userId=${id}`
-        );
+        setIsLoading(true);
+        const [userResponse, postsResponse] = await Promise.all([
+          axios.get(`https://jsonplaceholder.typicode.com/users/${id}`),
+          axios.get(`https://jsonplaceholder.typicode.com/users/${id}/posts`),
+        ]);
 
         setUser(userResponse.data);
         setPosts(postsResponse.data);
       } catch (error) {
-        console.error("Veri çekerken bir hata oluştu:", error);
+        console.error("Error fetching user data:", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
-    fetchData();
+    if (id) {
+      fetchUserData();
+    }
   }, [id]);
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="container">
-        <h1>Yükleniyor...</h1>
+      <div className="container" style={{ marginTop: 32, marginBottom: 32 }}>
+        <div
+          style={{
+            textAlign: "center",
+            padding: "40px 20px",
+            color: "var(--text-secondary)",
+            background: "var(--bg-secondary)",
+            borderRadius: "10px",
+            margin: "20px auto",
+            maxWidth: "400px",
+            boxShadow: "0 2px 12px var(--shadow-color)",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "1.2rem",
+              fontWeight: "500",
+              marginBottom: "10px",
+            }}
+          >
+            Yazar Bilgileri Yükleniyor...
+          </div>
+          <div
+            style={{
+              width: "40px",
+              height: "40px",
+              margin: "10px auto",
+              border: "3px solid var(--text-muted)",
+              borderTop: "3px solid var(--text-primary)",
+              borderRadius: "50%",
+              animation: "spin 1s linear infinite",
+            }}
+          />
+        </div>
+        <style>
+          {`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}
+        </style>
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="container">
-        <h1>Kullanıcı bulunamadı.</h1>
+      <div className="container" style={{ marginTop: 32, marginBottom: 32 }}>
+        <div
+          style={{
+            textAlign: "center",
+            padding: "40px 20px",
+            color: "var(--text-secondary)",
+            background: "var(--bg-secondary)",
+            borderRadius: "10px",
+          }}
+        >
+          <h2 style={{ color: "var(--text-primary)", marginBottom: "16px" }}>
+            Kullanıcı Bulunamadı
+          </h2>
+          <p>Aradığınız kullanıcı bilgilerine ulaşılamadı.</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container">
-      {/* Yazar bilgi kartı */}
-      <div className="user-info">
-        <h1>{user.name}</h1>
-        <p>
-          <strong>Kullanıcı Adı:</strong> {user.username}
-        </p>
-        <p>
-          <strong>Email:</strong> {user.email}
-        </p>
-        <p>
-          <strong>Şehir:</strong> {user.address.city}
-        </p>
-        <p>
-          <strong>Website:</strong>{" "}
-          <a
-            href={`http://${user.website}`}
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="container" style={{ marginTop: 32, marginBottom: 32 }}>
+      {/* Yazar Profil Kartı */}
+      <div
+        style={{
+          background: "var(--bg-secondary)",
+          borderRadius: "18px",
+          boxShadow: "0 2px 12px var(--shadow-color)",
+          padding: "32px",
+          marginBottom: "32px",
+          textAlign: "center",
+        }}
+      >
+        {/* Avatar */}
+        <div
+          style={{
+            width: "100px",
+            height: "100px",
+            borderRadius: "50%",
+            background: "linear-gradient(135deg, #007bff 60%, #00c6ff 100%)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#fff",
+            fontSize: "2.5rem",
+            fontWeight: "bold",
+            margin: "0 auto 20px",
+          }}
+        >
+          {user.name[0].toUpperCase()}
+        </div>
+
+        {/* Yazar Adı */}
+        <h1
+          style={{
+            fontSize: "2.5rem",
+            fontWeight: "800",
+            color: "var(--text-primary)",
+            marginBottom: "16px",
+            lineHeight: "1.2",
+          }}
+        >
+          {user.name}
+        </h1>
+
+        {/* Kullanıcı Bilgileri */}
+        <div
+          style={{
+            display: "grid",
+            gap: "16px",
+            maxWidth: "600px",
+            margin: "0 auto",
+            color: "var(--text-secondary)",
+          }}
+        >
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gap: "8px",
+              alignItems: "center",
+              fontSize: "1.1rem",
+              textAlign: "left",
+            }}
           >
-            {user.website}
-          </a>
-        </p>
+            <strong style={{ color: "var(--text-primary)" }}>
+              Kullanıcı Adı:
+            </strong>
+            <span>{user.username}</span>
+
+            <strong style={{ color: "var(--text-primary)" }}>Email:</strong>
+            <a
+              href={`mailto:${user.email}`}
+              style={{ color: "#007bff", textDecoration: "none" }}
+            >
+              {user.email}
+            </a>
+
+            <strong style={{ color: "var(--text-primary)" }}>Şehir:</strong>
+            <span>{user.address?.city}</span>
+
+            <strong style={{ color: "var(--text-primary)" }}>Website:</strong>
+            <a
+              href={`https://${user.website}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "#007bff", textDecoration: "none" }}
+            >
+              {user.website}
+            </a>
+          </div>
+        </div>
       </div>
 
-      <h2>{user.name} Adlı Kullanıcının Yazıları</h2>
-
-      <div>
+      {/* Yazarın Yazıları */}
+      <h2
+        style={{
+          fontSize: "1.8rem",
+          fontWeight: "700",
+          color: "var(--text-primary)",
+          marginBottom: "24px",
+          textAlign: "center",
+        }}
+      >
+        {user.name} Adlı Yazarın Yazıları ({posts.length})
+      </h2>
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+          <div
+            key={post.id}
+            style={{
+              background: "var(--bg-secondary)",
+              padding: "24px",
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px var(--shadow-color)",
+            }}
+          >
+            <h3
+              style={{
+                fontSize: "1.4rem",
+                fontWeight: "700",
+                color: "var(--text-primary)",
+                marginBottom: "12px",
+              }}
+            >
+              {post.title}
+            </h3>
+            <p
+              style={{
+                color: "var(--text-secondary)",
+                fontSize: "1.1rem",
+                lineHeight: "1.6",
+                margin: 0,
+              }}
+            >
+              {post.body}
+            </p>
+          </div>
         ))}
       </div>
     </div>

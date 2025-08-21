@@ -1,62 +1,48 @@
-/* PostCard.module.css */
-
 .card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  padding: 24px;
-  margin-bottom: 24px;
-  transition: box-shadow 0.2s, transform 0.2s;
+  background: var(--bg-secondary);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px var(--shadow-color);
+  padding: 28px;
+  margin-bottom: 32px;
+  transition: all 0.3s ease;
+  color: var(--text-primary);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
 }
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #007bff 0%, #00c6ff 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
 .card:hover {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 32px var(--shadow-color-hover);
+  transform: translateY(-2px);
 }
-  
-  .title {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    font-size: 1.25rem;
-    color: #2c3e50;
-  }
-  
-  .author {
-    font-style: italic;
-    color: #6c757d;
-    margin-bottom: 1rem;
-    display: block; /* p etiketinin tam genişlik kaplaması için */
-  }
-  
-  .body {
-    color: #495057;
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-  }
-  
-  .detailsButton {
-    display: inline-block;
-    padding: 10px 18px;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.2s;
-  }
-  
-  .detailsButton:hover {
-    background-color: #0056b3;
-    text-decoration: none;
-  }
+
+.card:hover::before {
+  opacity: 1;
+}
 
 .cardHeader {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
+  gap: 16px;
 }
+
 .avatar {
-  width: 44px;
-  height: 44px;
+  min-width: 48px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: linear-gradient(135deg, #007bff 60%, #00c6ff 100%);
   display: flex;
@@ -64,16 +50,102 @@
   justify-content: center;
   color: #fff;
   font-weight: bold;
-  font-size: 1.3rem;
-  margin-right: 16px;
+  font-size: 20px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
+
+.avatar:hover {
+  transform: scale(1.05);
+}
+
+.headerContent {
+  flex: 1;
+}
+
 .cardTitle {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  margin: 0;
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+  line-height: 1.4;
 }
+
 .cardMeta {
   font-size: 0.95rem;
-  color: #888;
-  margin-bottom: 8px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: fit-content;
+  transition: color 0.2s ease;
+}
+
+.cardMeta:hover {
+  color: #007bff;
+}
+
+.body {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 24px;
+  font-size: 1.05rem;
+  padding: 0 4px;
+}
+
+.buttonWrapper {
+  text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card {
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    font-size: 18px;
+  }
+
+  .cardTitle {
+    font-size: 1.25rem;
+  }
+
+  .body {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .avatar {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    font-size: 16px;
+  }
+
+  .cardTitle {
+    font-size: 1.15rem;
+  }
+
+  .cardMeta {
+    font-size: 0.9rem;
+  }
+
+  .body {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
 }
