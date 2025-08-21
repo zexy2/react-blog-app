@@ -5,12 +5,20 @@ import { SearchContext } from "../../context/SearchContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [theme, setTheme] = useState(
-    localStorage.getItem("theme") ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light")
-  );
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      document.documentElement.setAttribute("data-theme", savedTheme);
+      return savedTheme;
+    }
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    const defaultTheme = prefersDark ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", defaultTheme);
+    return defaultTheme;
+  });
+
   const location = useLocation();
   const { searchQuery, updateSearchQuery } = useContext(SearchContext);
 
@@ -28,7 +36,10 @@ const Header = () => {
   };
 
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
   };
 
   return (

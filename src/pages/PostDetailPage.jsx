@@ -11,26 +11,35 @@ const PostDetailPage = () => {
 
   // Avatar bileşeni
   const Avatar = ({
+    name,
     email,
     isAuthor = false,
     userId = null,
     size = 32,
     fontSize = 14,
   }) => {
-    // Email'den baş harfi al
-    const getInitial = (email) => {
-      const atIndex = email.indexOf("@");
-      if (atIndex > 0) {
-        return email.substring(0, atIndex).split("_")[0][0].toUpperCase();
+    // Baş harfi al - yazarlar için isimden, yorumlar için emailden
+    const getInitial = (name, email, isAuthor) => {
+      if (isAuthor && name) {
+        // Yazar için isimden al
+        const nameParts = name.split(" ");
+        return nameParts[0][0].toUpperCase();
+      } else if (email) {
+        // Yorum yapanlar için emailden al
+        const atIndex = email.indexOf("@");
+        if (atIndex > 0) {
+          return email.substring(0, 1).toUpperCase();
+        }
       }
-      return email[0].toUpperCase();
+      return "?";
     };
 
     const avatarStyle = {
       width: `${size}px`,
       height: `${size}px`,
       borderRadius: "50%",
-      background: "linear-gradient(135deg, #00c6ff 60%, #0072ff 100%)",
+      background:
+        "linear-gradient(135deg, var(--gradient-start) 60%, var(--gradient-end) 100%)",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -61,11 +70,11 @@ const PostDetailPage = () => {
           }
         }}
       >
-        {getInitial(email)}
+        {getInitial(name, email, isAuthor)}
       </div>
     );
 
-    return isAuthor ? (
+    return isAuthor && userId ? (
       <Link to={`/users/${userId}`} style={{ textDecoration: "none" }}>
         <AvatarContent />
       </Link>
@@ -200,7 +209,14 @@ const PostDetailPage = () => {
             width: "fit-content",
           }}
         >
-          <Avatar email={user.email} isAuthor={true} userId={user.id} />
+          <Avatar
+            name={user.name}
+            email={user.email}
+            isAuthor={true}
+            userId={user.id}
+            size={40}
+            fontSize={18}
+          />
           <Link
             to={`/users/${user.id}`}
             style={{
@@ -292,7 +308,7 @@ const PostDetailPage = () => {
                   gap: "12px",
                 }}
               >
-                <Avatar email={comment.email} />
+                <Avatar name={comment.name} email={comment.email} />
                 <div style={{ flex: 1 }}>
                   <h3
                     style={{
