@@ -5,22 +5,26 @@ const ContactPage = () => {
     <div className="container" style={{ marginTop: 32, marginBottom: 32 }}>
       <div
         style={{
-          background: "#fff",
+          background: "var(--bg-secondary)",
           borderRadius: 18,
-          boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+          boxShadow: "0 2px 12px var(--shadow-color)",
           padding: "32px 28px",
         }}
       >
         <h1 style={{ fontWeight: 800, fontSize: "2.2rem", marginBottom: 24 }}>
           İletişim
         </h1>
-
-        <div style={{ fontSize: "1.1rem", lineHeight: 1.7, color: "#222" }}>
+        <div
+          style={{
+            fontSize: "1.1rem",
+            lineHeight: 1.7,
+            color: "var(--text-secondary)",
+          }}
+        >
           <p style={{ marginBottom: 24 }}>
             Blog ile ilgili görüş, öneri veya iş birliği talepleriniz için
             aşağıdaki kanallardan bana ulaşabilirsiniz:
           </p>
-
           <div style={{ marginBottom: 32 }}>
             <div
               style={{
@@ -28,13 +32,19 @@ const ContactPage = () => {
                 alignItems: "center",
                 marginBottom: 16,
                 padding: "16px",
-                background: "#f8f9fa",
+                background: "var(--bg-primary)",
                 borderRadius: 12,
                 transition: "all 0.2s",
               }}
             >
               <div>
-                <strong style={{ display: "block", marginBottom: 4 }}>
+                <strong
+                  style={{
+                    display: "block",
+                    marginBottom: 4,
+                    color: "var(--text-primary)",
+                  }}
+                >
                   GitHub:
                 </strong>
                 <a
@@ -47,20 +57,25 @@ const ContactPage = () => {
                 </a>
               </div>
             </div>
-
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 marginBottom: 16,
                 padding: "16px",
-                background: "#f8f9fa",
+                background: "var(--bg-primary)",
                 borderRadius: 12,
                 transition: "all 0.2s",
               }}
             >
               <div>
-                <strong style={{ display: "block", marginBottom: 4 }}>
+                <strong
+                  style={{
+                    display: "block",
+                    marginBottom: 4,
+                    color: "var(--text-primary)",
+                  }}
+                >
                   LinkedIn:
                 </strong>
                 <a
@@ -73,20 +88,25 @@ const ContactPage = () => {
                 </a>
               </div>
             </div>
-
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 marginBottom: 16,
                 padding: "16px",
-                background: "#f8f9fa",
+                background: "var(--bg-primary)",
                 borderRadius: 12,
                 transition: "all 0.2s",
               }}
             >
               <div>
-                <strong style={{ display: "block", marginBottom: 4 }}>
+                <strong
+                  style={{
+                    display: "block",
+                    marginBottom: 4,
+                    color: "var(--text-primary)",
+                  }}
+                >
                   E-posta:
                 </strong>
                 <a
@@ -98,16 +118,15 @@ const ContactPage = () => {
               </div>
             </div>
           </div>
-
           <div
             style={{
-              background: "#e3f2fd",
+              background: "rgba(33, 150, 243, 0.1)",
               padding: "20px",
               borderRadius: 12,
               borderLeft: "4px solid #2196f3",
             }}
           >
-            <p style={{ margin: 0, fontWeight: 600, color: "#1976d2" }}>
+            <p style={{ margin: 0, fontWeight: 600, color: "#2196f3" }}>
               Size en kısa sürede geri dönüş yapmaya çalışacağım!
             </p>
           </div>
