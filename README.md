@@ -1,104 +1,58 @@
-# Postify Blog - React Blog Uygulaması
+# Postify Blog
 
-Modern ve responsive bir blog uygulaması. React, React Router ve JSONPlaceholder API kullanılarak geliştirilmiştir.
+A simple React blog app built with Vite. Uses JSONPlaceholder API for demo data.
 
-## 🚀 Özellikler
+Live demo: https://zexy2.github.io/react-blog-app
 
-- **Modern UI/UX**: Temiz ve kullanıcı dostu arayüz
-- **Responsive Tasarım**: Mobil ve desktop uyumlu
-- **Çok Sayfalı Yapı**: React Router ile sayfa yönlendirmeleri
-- **Blog Post Detayları**: Yazı detayları ve yorumlar
-- **Kullanıcı Profilleri**: Yazar sayfaları ve bilgileri
-- **Modern CSS**: Gradient butonlar, gölgeler ve animasyonlar
+## Features
 
-## 🛠️ Kullanılan Teknolojiler
+- Browse posts from different authors
+- View post details with comments
+- Author profile pages
+- Search across posts and authors
+- Dark/light theme toggle
+- Mobile responsive
 
-- **React 18** - Modern React hooks ve fonksiyonel bileşenler
-- **React Router DOM** - Sayfa yönlendirmeleri
-- **Axios** - HTTP istekleri için
-- **JSONPlaceholder API** - Sahte blog verileri
-- **CSS Modules** - Bileşen bazlı stillendirme
-- **Vite** - Hızlı geliştirme ortamı
+## Tech Stack
 
-## 📁 Proje Yapısı
+- React 19
+- React Router
+- Axios
+- Vite
+- CSS Modules
+
+## Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Run dev server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+Open http://localhost:5173 in your browser.
+
+## Project Structure
 
 ```
 src/
-├── components/          # Yeniden kullanılabilir bileşenler
-│   ├── Button/         # Modern buton bileşeni
-│   ├── Header/         # Navigasyon header'ı
-│   └── PostCard/       # Blog post kartı
-├── pages/              # Sayfa bileşenleri
-│   ├── HomePage.jsx    # Ana sayfa
-│   ├── PostDetailPage.jsx # Post detay sayfası
-│   ├── UserPage.jsx    # Kullanıcı profili
-│   ├── AboutPage.jsx   # Hakkında sayfası
-│   └── ContactPage.jsx # İletişim sayfası
-├── App.jsx             # Ana uygulama bileşeni
-└── main.jsx            # Uygulama giriş noktası
+├── components/     # Reusable UI components
+│   ├── Button/
+│   ├── Header/
+│   └── PostCard/
+├── context/        # React context (search state)
+├── pages/          # Route pages
+└── main.jsx        # Entry point
 ```
 
-## 🚀 Kurulum
+## Notes
 
-1. **Repository'yi klonlayın:**
+This is a learning project. The data comes from JSONPlaceholder, so it's all placeholder content.
 
-```bash
-git clone https://github.com/zexy2/postify-blog.git
-cd postify-blog
-```
+## Author
 
-2. **Bağımlılıkları yükleyin:**
-
-```bash
-npm install
-```
-
-3. **Uygulamayı başlatın:**
-
-```bash
-npm run dev
-```
-
-4. **Tarayıcıda açın:**
-
-```
-http://localhost:5173
-```
-
-## 📱 Sayfalar
-
-- **Ana Sayfa (/)**: Blog yazılarının listesi
-- **Post Detay (/posts/:id)**: Yazı detayları ve yorumlar
-- **Kullanıcı Profili (/users/:id)**: Yazar bilgileri ve yazıları
-- **Hakkında (/about)**: Proje hakkında bilgiler
-- **İletişim (/contact)**: İletişim bilgileri
-
-## 🎨 Tasarım Özellikleri
-
-- Modern kart tasarımı
-- Gradient butonlar
-- Smooth scroll animasyonları
-- Responsive grid sistemi
-- Hover efektleri
-- Sticky header
-
-## 👨‍💻 Geliştirici
-
-**Zeki Akgül**
-
-- GitHub: [zexy2](https://github.com/zexy2)
-- LinkedIn: [Zeki Akgül](https://www.linkedin.com/in/zeki-akgül)
-- E-posta: zekiakgul09@gmail.com
-
-
-## 🤝 Katkıda Bulunma
-
-1. Fork yapın
-2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
-3. Commit yapın (`git commit -m 'Add some AmazingFeature'`)
-4. Push yapın (`git push origin feature/AmazingFeature`)
-5. Pull Request açın
-
----
-
-⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!
+Zeki Akgül - [GitHub](https://github.com/zexy2)
