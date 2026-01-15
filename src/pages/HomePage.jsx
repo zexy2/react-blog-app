@@ -41,7 +41,6 @@ const HomePage = () => {
       setPosts(postsFromDifferentAuthors);
     } catch (err) {
       setError("Yazılar yüklenirken bir hata oluştu.");
-      console.error("Error fetching posts:", err);
     } finally {
       setIsLoading(false);
     }
