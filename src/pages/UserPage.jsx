@@ -19,8 +19,8 @@ const UserPage = () => {
 
         setUser(userResponse.data);
         setPosts(postsResponse.data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
+      } catch {
+        // Silent fail - will show empty state
       } finally {
         setIsLoading(false);
       }

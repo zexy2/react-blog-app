@@ -103,8 +103,8 @@ const PostDetailPage = () => {
 
         setUser(userResponse.data);
         setComments(commentsResponse.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      } catch {
+        // Silent fail - will show empty state
       } finally {
         setIsLoading(false);
       }
