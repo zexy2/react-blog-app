@@ -1,181 +1,413 @@
-import React, { useEffect, useState, useCallback, useContext } from "react";
-import axios from "axios";
-import PostCard from "../components/PostCard/PostCard";
-import { SearchContext } from "../context/SearchContext";
+/**
+ * HomePage Component
+ * Modern blog homepage with hero section and grid layout
+ */
+
+import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { FiPlus, FiSearch, FiArrowRight, FiTrendingUp } from 'react-icons/fi';
+import PostCard from '../components/PostCard/PostCard';
+import { usePosts } from '../hooks/usePosts';
+import { useSearch } from '../hooks/useSearch';
 
 const HomePage = () => {
-  const [posts, setPosts] = useState([]);
-  const [users, setUsers] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { searchQuery } = useContext(SearchContext);
+  const { t } = useTranslation();
+  const { posts, usersMap, isLoading, isError, error } = usePosts();
+  const { query, debouncedQuery } = useSearch();
+  const { isAuthenticated } = useSelector((state) => state.user);
 
-  const fetchPosts = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const [postsResponse, usersResponse] = await Promise.all([
-        axios.get("https://jsonplaceholder.typicode.com/posts"),
-        axios.get("https://jsonplaceholder.typicode.com/users"),
-      ]);
+  // Filter posts based on search
+  const filteredPosts = useMemo(() => {
+    if (!debouncedQuery.trim()) return posts;
 
-      const usersMap = usersResponse.data.reduce((acc, user) => {
-        acc[user.id] = user;
-        return acc;
-      }, {});
-      setUsers(usersMap);
+    return posts.filter((post) => {
+      const author = usersMap[post.userId];
+      const searchFields = [
+        post.title,
+        post.body,
+        author?.name,
+        author?.username,
+        author?.email,
+      ].filter(Boolean);
 
-      const allPosts = postsResponse.data;
-      const uniqueAuthors = [...new Set(allPosts.map((post) => post.userId))];
-      const selectedAuthors = uniqueAuthors.slice(0, 10);
+      const normalizedQuery = debouncedQuery.toLowerCase();
+      return searchFields.some((field) =>
+        field.toLowerCase().includes(normalizedQuery)
+      );
+    });
+  }, [posts, usersMap, debouncedQuery]);
 
-      const postsFromDifferentAuthors = allPosts
-        .filter((post) => selectedAuthors.includes(post.userId))
-        .reduce((acc, post) => {
-          if (!acc.some((p) => p.userId === post.userId)) {
-            acc.push(post);
-          }
-          return acc;
-        }, []);
-
-      setPosts(postsFromDifferentAuthors);
-    } catch (err) {
-      setError("Yazılar yüklenirken bir hata oluştu.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchPosts();
-  }, [fetchPosts]);
-
-  const normalizeText = (text) => {
-    if (!text) return "";
-    return text
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9\s]/g, "")
-      .trim();
-  };
-
-  const searchInText = (text, searchTerm) => {
-    if (!text || !searchTerm) return false;
-    const normalizedText = normalizeText(text);
-    const normalizedSearchTerm = normalizeText(searchTerm);
-    return normalizedText.includes(normalizedSearchTerm);
-  };
-
-  const filteredPosts = posts.filter((post) => {
-    if (!searchQuery.trim()) return true;
-
-    const author = users[post.userId];
-    if (!author) return false;
-
-    return (
-      searchInText(post.title, searchQuery) ||
-      searchInText(post.body, searchQuery) ||
-      searchInText(author.name, searchQuery) ||
-      searchInText(author.username, searchQuery) ||
-      searchInText(author.email, searchQuery)
-    );
-  });
-
+  // Loading State
   if (isLoading) {
     return (
-      <div
-        className="container"
-        style={{ textAlign: "center", padding: "40px" }}
-      >
-        <div
-          style={{
-            background: "var(--bg-secondary)",
-            borderRadius: 18,
-            boxShadow: "0 4px 20px var(--shadow-color)",
-            padding: "32px 28px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: "200px",
-            transition: "background 0.3s ease, box-shadow 0.3s ease",
-          }}
-        >
-          <div
-            className="spinner"
-            style={{
-              border: "4px solid var(--border-color)",
-              borderTop: "4px solid var(--gradient-start)",
-              borderRadius: "50%",
-              width: "40px",
-              height: "40px",
-              animation: "spin 1s linear infinite",
-              marginBottom: "20px",
-            }}
-          ></div>
-          <p style={{ fontSize: "1.2rem", color: "var(--text-primary)" }}>
-            Yazılar Yükleniyor...
-          </p>
+      <div className="container" style={{ padding: 'var(--space-3xl) 0' }}>
+        <div className="animate-pulse" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+          gap: 'var(--space-lg)',
+        }}>
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} style={{
+              background: 'var(--bg-secondary)',
+              borderRadius: 'var(--radius-xl)',
+              padding: 'var(--space-xl)',
+              height: '280px',
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-md)',
+                marginBottom: 'var(--space-lg)',
+              }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: 'var(--radius-lg)',
+                  background: 'var(--bg-tertiary)',
+                }} />
+                <div style={{ flex: 1 }}>
+                  <div style={{
+                    height: '20px',
+                    background: 'var(--bg-tertiary)',
+                    borderRadius: 'var(--radius-sm)',
+                    marginBottom: 'var(--space-sm)',
+                  }} />
+                  <div style={{
+                    height: '14px',
+                    width: '60%',
+                    background: 'var(--bg-tertiary)',
+                    borderRadius: 'var(--radius-sm)',
+                  }} />
+                </div>
+              </div>
+              <div style={{
+                height: '60px',
+                background: 'var(--bg-tertiary)',
+                borderRadius: 'var(--radius-md)',
+              }} />
+            </div>
+          ))}
         </div>
-        <style>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
       </div>
     );
   }
 
-  if (error) {
+  // Error State
+  if (isError) {
     return (
-      <div
-        className="container"
-        style={{ textAlign: "center", padding: "40px" }}
-      >
-        <p style={{ color: "red", fontSize: "1.2rem" }}>{error}</p>
+      <div className="container" style={{ padding: 'var(--space-3xl) 0', textAlign: 'center' }}>
+        <div style={{
+          background: 'var(--bg-secondary)',
+          borderRadius: 'var(--radius-xl)',
+          padding: 'var(--space-3xl)',
+          maxWidth: '500px',
+          margin: '0 auto',
+        }}>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            background: 'var(--error-light)',
+            borderRadius: 'var(--radius-full)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto var(--space-lg)',
+          }}>
+            <span style={{ fontSize: '28px' }}>😕</span>
+          </div>
+          <h3 style={{ marginBottom: 'var(--space-sm)' }}>{t('common.error')}</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-lg)' }}>
+            {error?.message || 'Bir hata oluştu'}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              padding: 'var(--space-sm) var(--space-xl)',
+              background: 'var(--gradient-primary)',
+              color: 'white',
+              border: 'none',
+              borderRadius: 'var(--radius-md)',
+              fontWeight: '600',
+              cursor: 'pointer',
+            }}
+          >
+            {t('common.retry')}
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container" style={{ marginTop: 32, marginBottom: 32 }}>
-      <h1
-        style={{
-          fontWeight: 800,
-          fontSize: "2.5rem",
-          marginBottom: 30,
-          textAlign: "center",
-          background:
-            "linear-gradient(90deg, var(--gradient-start), var(--gradient-end))",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-        }}
-      >
-        Blog Yazıları
-      </h1>
-      {filteredPosts.length === 0 && searchQuery && (
-        <p
-          style={{
-            textAlign: "center",
-            padding: "20px",
-            color: "var(--text-secondary)",
-            background: "var(--bg-secondary)",
-            borderRadius: "10px",
-            marginTop: "20px",
-            boxShadow: "0 2px 8px var(--shadow-color)",
-            border: "1px solid var(--card-border)",
-            transition:
-              "background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease",
-          }}
-        >
-          Arama sonucu bulunamadı.
-        </p>
+    <div>
+      {/* Hero Section - Only show when not searching */}
+      {!query && (
+        <section style={{
+          position: 'relative',
+          padding: 'var(--space-3xl) 0',
+          overflow: 'hidden',
+        }}>
+          <div className="container">
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: 'var(--space-2xl)',
+              alignItems: 'center',
+            }}>
+              {/* Hero Text */}
+              <div className="animate-fadeInUp">
+                <span style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-sm)',
+                  padding: 'var(--space-xs) var(--space-md)',
+                  background: 'var(--primary-light)',
+                  color: 'var(--primary)',
+                  borderRadius: 'var(--radius-full)',
+                  fontSize: 'var(--text-sm)',
+                  fontWeight: '600',
+                  marginBottom: 'var(--space-lg)',
+                }}>
+                  <FiTrendingUp size={14} />
+                  {t('posts.latestPosts')}
+                </span>
+                
+                <h1 style={{
+                  fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+                  fontWeight: '800',
+                  lineHeight: '1.1',
+                  marginBottom: 'var(--space-lg)',
+                  letterSpacing: '-0.03em',
+                }}>
+                  <span style={{
+                    background: 'var(--gradient-primary)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                  }}>
+                    Postify
+                  </span>
+                  <br />
+                  Blog
+                </h1>
+                
+                <p style={{
+                  fontSize: 'var(--text-lg)',
+                  color: 'var(--text-secondary)',
+                  lineHeight: '1.7',
+                  marginBottom: 'var(--space-xl)',
+                  maxWidth: '500px',
+                }}>
+                  {t('about.description')}
+                </p>
+                
+                <div style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: 'var(--space-md)',
+                }}>
+                  {isAuthenticated ? (
+                    <Link
+                      to="/posts/create"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 'var(--space-sm)',
+                        padding: 'var(--space-md) var(--space-xl)',
+                        background: 'var(--gradient-primary)',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: 'var(--radius-lg)',
+                        fontWeight: '600',
+                        fontSize: 'var(--text-base)',
+                        boxShadow: 'var(--shadow-lg), 0 8px 32px rgba(59, 130, 246, 0.25)',
+                        transition: 'all var(--transition-fast)',
+                      }}
+                    >
+                      <FiPlus size={20} />
+                      {t('posts.createPost')}
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/auth/register"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 'var(--space-sm)',
+                        padding: 'var(--space-md) var(--space-xl)',
+                        background: 'var(--gradient-primary)',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: 'var(--radius-lg)',
+                        fontWeight: '600',
+                        fontSize: 'var(--text-base)',
+                        boxShadow: 'var(--shadow-lg), 0 8px 32px rgba(59, 130, 246, 0.25)',
+                        transition: 'all var(--transition-fast)',
+                      }}
+                    >
+                      {t('auth.register')}
+                      <FiArrowRight size={18} />
+                    </Link>
+                  )}
+                  
+                  <Link
+                    to="/about"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 'var(--space-sm)',
+                      padding: 'var(--space-md) var(--space-xl)',
+                      background: 'var(--bg-secondary)',
+                      color: 'var(--text-primary)',
+                      textDecoration: 'none',
+                      borderRadius: 'var(--radius-lg)',
+                      fontWeight: '600',
+                      fontSize: 'var(--text-base)',
+                      border: '1px solid var(--border-color)',
+                      transition: 'all var(--transition-fast)',
+                    }}
+                  >
+                    {t('nav.about')}
+                  </Link>
+                </div>
+              </div>
+              
+              {/* Stats Cards */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: 'var(--space-md)',
+              }} className="animate-fadeInUp" >
+                {[
+                  { label: t('analytics.totalPosts'), value: posts.length, icon: '📝' },
+                  { label: t('analytics.totalAuthors'), value: Object.keys(usersMap).length, icon: '✍️' },
+                  { label: t('analytics.totalComments'), value: posts.length * 5, icon: '💬' },
+                  { label: t('bookmarks.title'), value: '∞', icon: '🔖' },
+                ].map((stat, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      background: 'var(--bg-secondary)',
+                      border: '1px solid var(--border-color)',
+                      borderRadius: 'var(--radius-xl)',
+                      padding: 'var(--space-xl)',
+                      textAlign: 'center',
+                      transition: 'all var(--transition-base)',
+                    }}
+                    className="card"
+                  >
+                    <span style={{ fontSize: '2rem', marginBottom: 'var(--space-sm)', display: 'block' }}>
+                      {stat.icon}
+                    </span>
+                    <div style={{
+                      fontSize: 'var(--text-3xl)',
+                      fontWeight: '800',
+                      color: 'var(--text-primary)',
+                      marginBottom: 'var(--space-xs)',
+                    }}>
+                      {stat.value}
+                    </div>
+                    <div style={{
+                      fontSize: 'var(--text-sm)',
+                      color: 'var(--text-muted)',
+                    }}>
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
       )}
-      {filteredPosts.map((post) => (
-        <PostCard key={post.id} post={post} author={users[post.userId]} />
-      ))}
+
+      {/* Posts Section */}
+      <section className="container" style={{ paddingBottom: 'var(--space-3xl)' }}>
+        {/* Section Header */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 'var(--space-xl)',
+          flexWrap: 'wrap',
+          gap: 'var(--space-md)',
+        }}>
+          <div>
+            <h2 style={{
+              fontSize: 'var(--text-2xl)',
+              fontWeight: '700',
+              marginBottom: 'var(--space-xs)',
+            }}>
+              {query ? `"${query}" ${t('common.search')}` : t('posts.allPosts')}
+            </h2>
+            <p style={{
+              color: 'var(--text-muted)',
+              fontSize: 'var(--text-sm)',
+            }}>
+              {filteredPosts.length} {t('posts.title').toLowerCase()}
+            </p>
+          </div>
+        </div>
+
+        {/* No Results */}
+        {filteredPosts.length === 0 && query && (
+          <div style={{
+            textAlign: 'center',
+            padding: 'var(--space-3xl)',
+            background: 'var(--bg-secondary)',
+            borderRadius: 'var(--radius-xl)',
+            border: '1px solid var(--border-color)',
+          }}>
+            <FiSearch size={48} style={{ color: 'var(--text-muted)', marginBottom: 'var(--space-lg)' }} />
+            <h3 style={{ marginBottom: 'var(--space-sm)' }}>{t('common.noResults')}</h3>
+            <p style={{ color: 'var(--text-secondary)' }}>
+              "{query}" {t('common.noResultsFor')}
+            </p>
+          </div>
+        )}
+
+        {/* Posts Grid - Bento Style */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+          gap: 'var(--space-lg)',
+        }}>
+          {filteredPosts.slice(0, 20).map((post, index) => (
+            <div
+              key={post.id}
+              className="animate-fadeInUp"
+              style={{ animationDelay: `${index * 50}ms` }}
+            >
+              <PostCard post={post} author={usersMap[post.userId]} />
+            </div>
+          ))}
+        </div>
+
+        {/* Load More */}
+        {filteredPosts.length > 20 && (
+          <div style={{
+            textAlign: 'center',
+            marginTop: 'var(--space-2xl)',
+          }}>
+            <button
+              style={{
+                padding: 'var(--space-md) var(--space-2xl)',
+                background: 'var(--bg-secondary)',
+                color: 'var(--text-primary)',
+                border: '1px solid var(--border-color)',
+                borderRadius: 'var(--radius-lg)',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all var(--transition-fast)',
+              }}
+            >
+              {t('common.loadMore')}
+            </button>
+          </div>
+        )}
+      </section>
     </div>
   );
 };

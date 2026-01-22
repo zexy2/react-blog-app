@@ -1,0 +1,200 @@
+/**
+ * RichTextEditor Styles
+ */
+
+.editor {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.editor:focus-within {
+  border-color: var(--gradient-start);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.menuBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.menuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.menuButton:hover:not(:disabled) {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.menuButton.active {
+  background: var(--gradient-start);
+  color: white;
+}
+
+.menuButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.menuButton.bold {
+  font-weight: 800;
+}
+
+.menuButton.italic {
+  font-style: italic;
+}
+
+.menuButton.strike {
+  text-decoration: line-through;
+}
+
+.divider {
+  width: 1px;
+  height: 24px;
+  margin: 4px 8px;
+  background: var(--border-color);
+}
+
+.content {
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+.content :global(.ProseMirror) {
+  outline: none;
+  min-height: inherit;
+  max-height: inherit;
+  overflow-y: auto;
+}
+
+.content :global(.ProseMirror) > * + * {
+  margin-top: 0.75em;
+}
+
+.content :global(.ProseMirror) p {
+  margin: 0;
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+.content :global(.ProseMirror) h1 {
+  font-size: 2em;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 1em 0 0.5em;
+}
+
+.content :global(.ProseMirror) h2 {
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 1em 0 0.5em;
+}
+
+.content :global(.ProseMirror) h3 {
+  font-size: 1.25em;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 1em 0 0.5em;
+}
+
+.content :global(.ProseMirror) ul,
+.content :global(.ProseMirror) ol {
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+
+.content :global(.ProseMirror) li {
+  color: var(--text-primary);
+  line-height: 1.7;
+}
+
+.content :global(.ProseMirror) blockquote {
+  border-left: 4px solid var(--gradient-start);
+  padding-left: 1em;
+  margin: 1em 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.content :global(.ProseMirror) code {
+  background: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 0.9em;
+  color: var(--gradient-start);
+}
+
+.content :global(.ProseMirror) pre {
+  background: var(--bg-secondary);
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.content :global(.ProseMirror) pre code {
+  background: none;
+  padding: 0;
+  color: var(--text-primary);
+}
+
+.content :global(.ProseMirror) strong {
+  font-weight: 700;
+}
+
+.content :global(.ProseMirror) em {
+  font-style: italic;
+}
+
+.content :global(.ProseMirror) s {
+  text-decoration: line-through;
+}
+
+/* Placeholder */
+.content :global(.ProseMirror) p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--text-muted);
+  pointer-events: none;
+  height: 0;
+}
+
+/* Scrollbar */
+.content :global(.ProseMirror)::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content :global(.ProseMirror)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content :global(.ProseMirror)::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.content :global(.ProseMirror)::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}

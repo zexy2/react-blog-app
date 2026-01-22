@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import axios from "axios";
 
 const UserPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -19,8 +21,9 @@ const UserPage = () => {
 
         setUser(userResponse.data);
         setPosts(postsResponse.data);
-      } catch {
-        // Silent fail - will show empty state
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        // Will show empty state
       } finally {
         setIsLoading(false);
       }
@@ -53,7 +56,7 @@ const UserPage = () => {
               marginBottom: "10px",
             }}
           >
-            Yazar Bilgileri Yükleniyor...
+            {t('common.loadingAuthor')}
           </div>
           <div
             style={{
@@ -92,9 +95,9 @@ const UserPage = () => {
           }}
         >
           <h2 style={{ color: "var(--text-primary)", marginBottom: "16px" }}>
-            Kullanıcı Bulunamadı
+            {t('common.authorNotFound')}
           </h2>
-          <p>Aradığınız kullanıcı bilgilerine ulaşılamadı.</p>
+          <p>{t('errors.userNotFound')}</p>
         </div>
       </div>
     );

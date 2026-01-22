@@ -1,0 +1,248 @@
+/**
+ * Register Page
+ * 
+ * New user registration with validation
+ */
+
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { FaGoogle, FaGithub, FaEye, FaEyeSlash, FaEnvelope, FaLock, FaUser } from 'react-icons/fa';
+import { useAuth } from '../../hooks/useAuth';
+import styles from './RegisterPage.module.css';
+
+const RegisterPage = () => {
+  const { t } = useTranslation();
+  const { register, loginWithOAuth, isLoading } = useAuth();
+
+  const [formData, setFormData] = useState({
+    fullName: '',
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.fullName) {
+      newErrors.fullName = t('validation.required');
+    } else if (formData.fullName.length < 2) {
+      newErrors.fullName = t('validation.minLength', { min: 2 });
+    }
+
+    if (!formData.username) {
+      newErrors.username = t('validation.required');
+    } else if (formData.username.length < 3) {
+      newErrors.username = t('validation.minLength', { min: 3 });
+    } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
+      newErrors.username = t('validation.usernameFormat');
+    }
+
+    if (!formData.email) {
+      newErrors.email = t('validation.required');
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = t('validation.invalidEmail');
+    }
+
+    if (!formData.password) {
+      newErrors.password = t('validation.required');
+    } else if (formData.password.length < 8) {
+      newErrors.password = t('validation.minLength', { min: 8 });
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = t('validation.required');
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = t('validation.passwordMismatch');
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: null }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      await register(formData);
+    }
+  };
+
+  const handleOAuthLogin = async (provider) => {
+    await loginWithOAuth(provider);
+  };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>{t('auth.register')}</h1>
+          <p className={styles.subtitle}>{t('auth.registerSubtitle')}</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.row}>
+            <div className={styles.inputGroup}>
+              <label htmlFor="fullName" className={styles.label}>
+                {t('auth.fullName')}
+              </label>
+              <div className={styles.inputWrapper}>
+                <FaUser className={styles.inputIcon} />
+                <input
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  placeholder={t('auth.fullNamePlaceholder')}
+                  className={`${styles.input} ${errors.fullName ? styles.inputError : ''}`}
+                  disabled={isLoading}
+                />
+              </div>
+              {errors.fullName && <span className={styles.error}>{errors.fullName}</span>}
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label htmlFor="username" className={styles.label}>
+                {t('auth.username')}
+              </label>
+              <div className={styles.inputWrapper}>
+                <span className={styles.inputPrefix}>@</span>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  placeholder={t('auth.usernamePlaceholder')}
+                  className={`${styles.input} ${styles.inputWithPrefix} ${
+                    errors.username ? styles.inputError : ''
+                  }`}
+                  disabled={isLoading}
+                />
+              </div>
+              {errors.username && <span className={styles.error}>{errors.username}</span>}
+            </div>
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label htmlFor="email" className={styles.label}>
+              {t('auth.email')}
+            </label>
+            <div className={styles.inputWrapper}>
+              <FaEnvelope className={styles.inputIcon} />
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder={t('auth.emailPlaceholder')}
+                className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
+                disabled={isLoading}
+              />
+            </div>
+            {errors.email && <span className={styles.error}>{errors.email}</span>}
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label htmlFor="password" className={styles.label}>
+              {t('auth.password')}
+            </label>
+            <div className={styles.inputWrapper}>
+              <FaLock className={styles.inputIcon} />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder={t('auth.passwordPlaceholder')}
+                className={`${styles.input} ${errors.password ? styles.inputError : ''}`}
+                disabled={isLoading}
+              />
+              <button
+                type="button"
+                className={styles.passwordToggle}
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+            {errors.password && <span className={styles.error}>{errors.password}</span>}
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label htmlFor="confirmPassword" className={styles.label}>
+              {t('auth.confirmPassword')}
+            </label>
+            <div className={styles.inputWrapper}>
+              <FaLock className={styles.inputIcon} />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder={t('auth.confirmPasswordPlaceholder')}
+                className={`${styles.input} ${errors.confirmPassword ? styles.inputError : ''}`}
+                disabled={isLoading}
+              />
+            </div>
+            {errors.confirmPassword && (
+              <span className={styles.error}>{errors.confirmPassword}</span>
+            )}
+          </div>
+
+          <button type="submit" className={styles.submitButton} disabled={isLoading}>
+            {isLoading ? t('common.loading') : t('auth.createAccount')}
+          </button>
+        </form>
+
+        <div className={styles.divider}>
+          <span>{t('auth.orContinueWith')}</span>
+        </div>
+
+        <div className={styles.oauthButtons}>
+          <button
+            type="button"
+            className={`${styles.oauthButton} ${styles.google}`}
+            onClick={() => handleOAuthLogin('google')}
+            disabled={isLoading}
+          >
+            <FaGoogle />
+            <span>Google</span>
+          </button>
+          <button
+            type="button"
+            className={`${styles.oauthButton} ${styles.github}`}
+            onClick={() => handleOAuthLogin('github')}
+            disabled={isLoading}
+          >
+            <FaGithub />
+            <span>GitHub</span>
+          </button>
+        </div>
+
+        <p className={styles.footer}>
+          {t('auth.hasAccount')}{' '}
+          <Link to="/auth/login">{t('auth.login')}</Link>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default RegisterPage;

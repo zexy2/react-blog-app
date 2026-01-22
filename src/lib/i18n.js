@@ -1,0 +1,489 @@
+/**
+ * i18n Configuration
+ * Multi-language support for the application
+ */
+
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { STORAGE_KEYS } from '../constants';
+
+// Translation resources
+const resources = {
+  tr: {
+    translation: {
+      // Navigation
+      nav: {
+        home: 'Ana Sayfa',
+        about: 'Hakkında',
+        contact: 'İletişim',
+        bookmarks: 'Favoriler',
+        analytics: 'İstatistikler',
+        createPost: 'Yazı Oluştur',
+      },
+      // Common
+      common: {
+        search: 'Ara...',
+        searchPosts: 'Yazı ara...',
+        loading: 'Yükleniyor...',
+        error: 'Bir hata oluştu',
+        retry: 'Tekrar Dene',
+        save: 'Kaydet',
+        cancel: 'İptal',
+        delete: 'Sil',
+        edit: 'Düzenle',
+        create: 'Oluştur',
+        back: 'Geri',
+        readMore: 'Devamını Oku',
+        viewDetails: 'Detayı Gör',
+        noResults: 'Sonuç bulunamadı',
+        noResultsFor: 'için sonuç bulunamadı',
+        loadMore: 'Daha Fazla Göster',
+        confirmDelete: 'Silmek istediğinize emin misiniz?',
+        authorNotFound: 'Kullanıcı Bulunamadı',
+        loadingAuthor: 'Yazar Bilgileri Yükleniyor...',
+      },
+      // Posts
+      posts: {
+        title: 'Yazılar',
+        latestPosts: 'Son Yazılar',
+        allPosts: 'Tüm Yazılar',
+        myPosts: 'Yazılarım',
+        createPost: 'Yeni Yazı Oluştur',
+        editPost: 'Yazıyı Düzenle',
+        postTitle: 'Başlık',
+        postContent: 'İçerik',
+        author: 'Yazar',
+        comments: 'Yorumlar',
+        noComments: 'Henüz yorum yok',
+        addComment: 'Yorum Ekle',
+        publishedAt: 'Yayınlanma',
+        readingTime: 'dk okuma',
+      },
+      // Bookmarks
+      bookmarks: {
+        title: 'Favorilerim',
+        empty: 'Henüz favori yazınız yok',
+        emptyHint: 'Beğendiğiniz yazıları favorilere ekleyin',
+        addToBookmarks: 'Favorilere Ekle',
+        removeFromBookmarks: 'Favorilerden Kaldır',
+        clearAll: 'Tümünü Temizle',
+      },
+      // Analytics
+      analytics: {
+        title: 'İstatistikler',
+        totalPosts: 'Toplam Yazı',
+        totalAuthors: 'Toplam Yazar',
+        totalComments: 'Toplam Yorum',
+        avgCommentsPerPost: 'Yazı Başına Yorum',
+        postsByAuthor: 'Yazara Göre Yazılar',
+        postsOverTime: 'Zaman İçinde Yazılar',
+        topAuthors: 'En Aktif Yazarlar',
+      },
+      // User
+      user: {
+        profile: 'Profil',
+        posts: 'Yazıları',
+        email: 'E-posta',
+        phone: 'Telefon',
+        website: 'Web Sitesi',
+        company: 'Şirket',
+        address: 'Adres',
+      },
+      // About
+      about: {
+        title: 'Hakkında',
+        description: 'Postify Blog, modern web teknolojileri ile geliştirilmiş, profesyonel bir blog platformudur.',
+        technologies: 'Kullanılan Teknolojiler',
+        features: 'Özellikler',
+      },
+      // Contact
+      contact: {
+        title: 'İletişim',
+        description: 'Sorularınız veya önerileriniz için bizimle iletişime geçin.',
+        github: 'GitHub',
+        linkedin: 'LinkedIn',
+        email: 'E-posta',
+      },
+      // Theme
+      theme: {
+        light: 'Aydınlık Mod',
+        dark: 'Karanlık Mod',
+        toggle: 'Tema Değiştir',
+      },
+      // Errors
+      errors: {
+        notFound: 'Sayfa bulunamadı',
+        serverError: 'Sunucu hatası',
+        networkError: 'Bağlantı hatası',
+        unauthorized: 'Yetkisiz erişim',
+        userNotFound: 'Aradığınız kullanıcı bilgilerine ulaşılamadı.',
+      },
+      // Form validation
+      validation: {
+        required: 'Bu alan zorunludur',
+        minLength: 'En az {{min}} karakter olmalıdır',
+        maxLength: 'En fazla {{max}} karakter olabilir',
+        invalidEmail: 'Geçerli bir e-posta adresi girin',
+      },
+      // Success messages
+      success: {
+        postCreated: 'Yazı başarıyla oluşturuldu',
+        postUpdated: 'Yazı başarıyla güncellendi',
+        postDeleted: 'Yazı başarıyla silindi',
+        bookmarkAdded: 'Favorilere eklendi',
+        bookmarkRemoved: 'Favorilerden kaldırıldı',
+      },
+      // Auth
+      auth: {
+        login: 'Giriş Yap',
+        register: 'Kayıt Ol',
+        logout: 'Çıkış Yap',
+        loginSubtitle: 'Hesabınıza giriş yapın',
+        registerSubtitle: 'Yeni hesap oluşturun',
+        email: 'E-posta',
+        emailPlaceholder: 'ornek@email.com',
+        password: 'Şifre',
+        passwordPlaceholder: 'Şifrenizi girin',
+        confirmPassword: 'Şifre Tekrar',
+        confirmPasswordPlaceholder: 'Şifrenizi tekrar girin',
+        fullName: 'Ad Soyad',
+        fullNamePlaceholder: 'Adınız Soyadınız',
+        username: 'Kullanıcı Adı',
+        usernamePlaceholder: 'kullanici_adi',
+        forgotPassword: 'Şifremi unuttum',
+        orContinueWith: 'veya şununla devam edin',
+        noAccount: 'Hesabınız yok mu?',
+        hasAccount: 'Zaten hesabınız var mı?',
+        createAccount: 'Hesap Oluştur',
+        loginSuccess: 'Başarıyla giriş yapıldı',
+        loginError: 'Giriş yapılamadı',
+        registerSuccess: 'Kayıt başarılı! E-postanızı kontrol edin',
+        registerError: 'Kayıt olunamadı',
+        logoutSuccess: 'Başarıyla çıkış yapıldı',
+        resetPasswordSent: 'Şifre sıfırlama e-postası gönderildi',
+        profileUpdated: 'Profil güncellendi',
+      },
+      // Comments
+      comments: {
+        title: 'Yorumlar',
+        placeholder: 'Yorum yazın...',
+        submit: 'Gönder',
+        reply: 'Yanıtla',
+        replyPlaceholder: '{{name}} kullanıcısına yanıt yaz...',
+        edited: 'düzenlendi',
+        added: 'Yorum eklendi',
+        updated: 'Yorum güncellendi',
+        deleted: 'Yorum silindi',
+        confirmDelete: 'Yorumu silmek istediğinize emin misiniz?',
+        noComments: 'Henüz yorum yok. İlk yorumu siz yapın!',
+        loginToComment: 'Yorum yapmak için giriş yapın',
+      },
+      // Upload
+      upload: {
+        dragDrop: 'Dosyaları sürükleyip bırakın',
+        or: 'veya',
+        browse: 'Dosya Seç',
+        hint: 'Maksimum {{max}} dosya yükleyebilirsiniz',
+        dropHere: 'Dosyaları buraya bırakın',
+        uploading: 'Yükleniyor... %{{progress}}',
+        removed: 'Dosya silindi',
+        fileTooLarge: '{{name}} dosyası çok büyük',
+        invalidType: '{{name}} dosya türü desteklenmiyor',
+        maxFilesExceeded: 'Maksimum {{max}} dosya yüklenebilir',
+      },
+      // Share
+      share: {
+        title: 'Paylaş',
+        copied: 'Link kopyalandı!',
+        copyError: 'Link kopyalanamadı',
+      },
+      // Profile
+      profile: {
+        edit: 'Profili Düzenle',
+        bio: 'Hakkında',
+        bioPlaceholder: 'Kendinizden bahsedin...',
+        website: 'Web Sitesi',
+        location: 'Konum',
+        locationPlaceholder: 'Şehir, Ülke',
+        memberSince: 'Üyelik Tarihi',
+        avatarUpdated: 'Profil fotoğrafı güncellendi',
+        avatarError: 'Fotoğraf yüklenemedi',
+      },
+      // Error
+      error: {
+        title: 'Bir Hata Oluştu',
+        message: 'Beklenmeyen bir hata oluştu. Lütfen sayfayı yenileyin veya daha sonra tekrar deneyin.',
+        details: 'Hata Detayları',
+        retry: 'Tekrar Dene',
+        home: 'Ana Sayfaya Dön',
+      },
+      // 404
+      notFound: {
+        title: 'Sayfa Bulunamadı',
+        message: 'Aradığınız sayfa mevcut değil veya taşınmış olabilir.',
+        home: 'Ana Sayfa',
+        back: 'Geri Dön',
+        suggestions: 'Önerilen Sayfalar',
+      },
+      // Time
+      time: {
+        justNow: 'Az önce',
+        minutesAgo: '{{count}} dakika önce',
+        hoursAgo: '{{count}} saat önce',
+        daysAgo: '{{count}} gün önce',
+      },
+    },
+  },
+  en: {
+    translation: {
+      // Navigation
+      nav: {
+        home: 'Home',
+        about: 'About',
+        contact: 'Contact',
+        bookmarks: 'Bookmarks',
+        analytics: 'Analytics',
+        createPost: 'Create Post',
+      },
+      // Common
+      common: {
+        search: 'Search...',
+        searchPosts: 'Search posts...',
+        loading: 'Loading...',
+        error: 'An error occurred',
+        retry: 'Retry',
+        save: 'Save',
+        cancel: 'Cancel',
+        delete: 'Delete',
+        edit: 'Edit',
+        create: 'Create',
+        back: 'Back',
+        readMore: 'Read More',
+        viewDetails: 'View Details',
+        noResults: 'No results found',
+        noResultsFor: 'no results found for',
+        loadMore: 'Load More',
+        confirmDelete: 'Are you sure you want to delete?',
+        authorNotFound: 'User Not Found',
+        loadingAuthor: 'Loading Author Info...',
+      },
+      // Posts
+      posts: {
+        title: 'Posts',
+        latestPosts: 'Latest Posts',
+        allPosts: 'All Posts',
+        myPosts: 'My Posts',
+        createPost: 'Create New Post',
+        editPost: 'Edit Post',
+        postTitle: 'Title',
+        postContent: 'Content',
+        author: 'Author',
+        comments: 'Comments',
+        noComments: 'No comments yet',
+        addComment: 'Add Comment',
+        publishedAt: 'Published',
+        readingTime: 'min read',
+      },
+      // Bookmarks
+      bookmarks: {
+        title: 'My Bookmarks',
+        empty: 'No bookmarks yet',
+        emptyHint: 'Add posts you like to bookmarks',
+        addToBookmarks: 'Add to Bookmarks',
+        removeFromBookmarks: 'Remove from Bookmarks',
+        clearAll: 'Clear All',
+      },
+      // Analytics
+      analytics: {
+        title: 'Analytics',
+        totalPosts: 'Total Posts',
+        totalAuthors: 'Total Authors',
+        totalComments: 'Total Comments',
+        avgCommentsPerPost: 'Comments per Post',
+        postsByAuthor: 'Posts by Author',
+        postsOverTime: 'Posts Over Time',
+        topAuthors: 'Top Authors',
+      },
+      // User
+      user: {
+        profile: 'Profile',
+        posts: 'Posts',
+        email: 'Email',
+        phone: 'Phone',
+        website: 'Website',
+        company: 'Company',
+        address: 'Address',
+      },
+      // About
+      about: {
+        title: 'About',
+        description: 'Postify Blog is a professional blog platform built with modern web technologies.',
+        technologies: 'Technologies Used',
+        features: 'Features',
+      },
+      // Contact
+      contact: {
+        title: 'Contact',
+        description: 'Contact us for questions or suggestions.',
+        github: 'GitHub',
+        linkedin: 'LinkedIn',
+        email: 'Email',
+      },
+      // Theme
+      theme: {
+        light: 'Light Mode',
+        dark: 'Dark Mode',
+        toggle: 'Toggle Theme',
+      },
+      // Errors
+      errors: {
+        notFound: 'Page not found',
+        serverError: 'Server error',
+        networkError: 'Network error',
+        unauthorized: 'Unauthorized access',
+        userNotFound: 'Could not find the requested user.',
+      },
+      // Form validation
+      validation: {
+        required: 'This field is required',
+        minLength: 'Must be at least {{min}} characters',
+        maxLength: 'Must be at most {{max}} characters',
+        invalidEmail: 'Enter a valid email address',
+        passwordMismatch: 'Passwords do not match',
+        usernameFormat: 'Only letters, numbers and underscore allowed',
+      },
+      // Success messages
+      success: {
+        postCreated: 'Post created successfully',
+        postUpdated: 'Post updated successfully',
+        postDeleted: 'Post deleted successfully',
+        bookmarkAdded: 'Added to bookmarks',
+        bookmarkRemoved: 'Removed from bookmarks',
+      },
+      // Auth
+      auth: {
+        login: 'Login',
+        register: 'Register',
+        logout: 'Logout',
+        loginSubtitle: 'Sign in to your account',
+        registerSubtitle: 'Create a new account',
+        email: 'Email',
+        emailPlaceholder: 'example@email.com',
+        password: 'Password',
+        passwordPlaceholder: 'Enter your password',
+        confirmPassword: 'Confirm Password',
+        confirmPasswordPlaceholder: 'Re-enter your password',
+        fullName: 'Full Name',
+        fullNamePlaceholder: 'Your Full Name',
+        username: 'Username',
+        usernamePlaceholder: 'username',
+        forgotPassword: 'Forgot password?',
+        orContinueWith: 'or continue with',
+        noAccount: "Don't have an account?",
+        hasAccount: 'Already have an account?',
+        createAccount: 'Create Account',
+        loginSuccess: 'Logged in successfully',
+        loginError: 'Login failed',
+        registerSuccess: 'Registration successful! Check your email',
+        registerError: 'Registration failed',
+        logoutSuccess: 'Logged out successfully',
+        resetPasswordSent: 'Password reset email sent',
+        profileUpdated: 'Profile updated',
+      },
+      // Comments
+      comments: {
+        title: 'Comments',
+        placeholder: 'Write a comment...',
+        submit: 'Submit',
+        reply: 'Reply',
+        replyPlaceholder: 'Reply to {{name}}...',
+        edited: 'edited',
+        added: 'Comment added',
+        updated: 'Comment updated',
+        deleted: 'Comment deleted',
+        confirmDelete: 'Are you sure you want to delete this comment?',
+        noComments: 'No comments yet. Be the first to comment!',
+        loginToComment: 'Login to comment',
+      },
+      // Upload
+      upload: {
+        dragDrop: 'Drag and drop files here',
+        or: 'or',
+        browse: 'Browse Files',
+        hint: 'You can upload up to {{max}} files',
+        dropHere: 'Drop files here',
+        uploading: 'Uploading... {{progress}}%',
+        removed: 'File removed',
+        fileTooLarge: '{{name}} is too large',
+        invalidType: '{{name}} file type not supported',
+        maxFilesExceeded: 'Maximum {{max}} files allowed',
+      },
+      // Share
+      share: {
+        title: 'Share',
+        copied: 'Link copied!',
+        copyError: 'Failed to copy link',
+      },
+      // Profile
+      profile: {
+        edit: 'Edit Profile',
+        bio: 'Bio',
+        bioPlaceholder: 'Tell us about yourself...',
+        website: 'Website',
+        location: 'Location',
+        locationPlaceholder: 'City, Country',
+        memberSince: 'Member Since',
+        avatarUpdated: 'Profile photo updated',
+        avatarError: 'Failed to upload photo',
+      },
+      // Error
+      error: {
+        title: 'Something Went Wrong',
+        message: 'An unexpected error occurred. Please refresh the page or try again later.',
+        details: 'Error Details',
+        retry: 'Try Again',
+        home: 'Go Home',
+      },
+      // 404
+      notFound: {
+        title: 'Page Not Found',
+        message: 'The page you are looking for does not exist or has been moved.',
+        home: 'Go Home',
+        back: 'Go Back',
+        suggestions: 'Suggested Pages',
+      },
+      // Time
+      time: {
+        justNow: 'Just now',
+        minutesAgo: '{{count}} minutes ago',
+        hoursAgo: '{{count}} hours ago',
+        daysAgo: '{{count}} days ago',
+      },
+    },
+  },
+};
+
+// Get initial language
+const getInitialLanguage = () => {
+  const saved = localStorage.getItem(STORAGE_KEYS.LANGUAGE);
+  if (saved && ['tr', 'en'].includes(saved)) return saved;
+  
+  const browserLang = navigator.language.split('-')[0];
+  return ['tr', 'en'].includes(browserLang) ? browserLang : 'tr';
+};
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: getInitialLanguage(),
+    fallbackLng: 'tr',
+    interpolation: {
+      escapeValue: false, // React already escapes
+    },
+    react: {
+      useSuspense: false,
+    },
+  });
+
+export default i18n;

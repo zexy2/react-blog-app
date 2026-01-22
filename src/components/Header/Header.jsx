@@ -1,109 +1,173 @@
-import React, { useState, useEffect, useContext } from "react";
-import styles from "./Header.module.css";
-import { Link, useLocation } from "react-router-dom";
-import { SearchContext } from "../../context/SearchContext";
+/**
+ * Header Component
+ * Main navigation header with search, theme toggle, and language switcher
+ */
+
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { FiPlus, FiBookmark, FiBarChart2, FiGithub, FiUser, FiLogIn, FiLogOut } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
+
+import styles from './Header.module.css';
+import { useTheme } from '../../hooks/useTheme';
+import { useSearch } from '../../hooks/useSearch';
+import { useBookmarks } from '../../hooks/useBookmarks';
+import { useAuth } from '../../hooks/useAuth';
+import LanguageSwitcher from '../LanguageSwitcher';
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      document.documentElement.setAttribute("data-theme", savedTheme);
-      return savedTheme;
-    }
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    const defaultTheme = prefersDark ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", defaultTheme);
-    return defaultTheme;
-  });
-
+  const { t } = useTranslation();
   const location = useLocation();
-  const { searchQuery, updateSearchQuery } = useContext(SearchContext);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+  const { theme, toggle: toggleTheme } = useTheme();
+  const { query, setQuery } = useSearch();
+  const { bookmarksCount } = useBookmarks();
+  const { isAuthenticated, user, logout: handleLogout } = useAuth();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
 
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
+  const isActive = (path) => location.pathname === path;
 
   return (
     <header className={styles.header}>
       <div className={styles.container}>
         <div className={styles.logo}>
           <Link to="/" onClick={closeMenu}>
-            Postify Blog
+            <span className={styles.logoIcon}>📝</span>
+            Postify
           </Link>
         </div>
+
         <button
-          className={`${styles.menuButton} ${isMenuOpen ? styles.open : ""}`}
+          className={`${styles.menuButton} ${isMenuOpen ? styles.open : ''}`}
           onClick={toggleMenu}
+          aria-label="Toggle menu"
         >
           <span></span>
           <span></span>
           <span></span>
         </button>
 
-        <div
-          className={`${styles.navContainer} ${isMenuOpen ? styles.open : ""}`}
-        >
+        <div className={`${styles.navContainer} ${isMenuOpen ? styles.open : ''}`}>
+          {/* Search Box */}
           <div className={styles.searchBox}>
             <input
               type="text"
-              placeholder="🔍 Yazı ara..."
-              value={searchQuery}
-              onChange={(e) => updateSearchQuery(e.target.value)}
+              placeholder={`🔍 ${t('common.searchPosts')}`}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
             />
           </div>
+
+          {/* Navigation Links */}
           <nav className={styles.navLinks}>
             <Link
               to="/"
-              className={location.pathname === "/" ? styles.active : ""}
+              className={isActive('/') ? styles.active : ''}
               onClick={closeMenu}
             >
-              Ana Sayfa
+              {t('nav.home')}
             </Link>
+
+            {isAuthenticated && (
+              <Link
+                to="/posts/create"
+                className={`${styles.createButton} ${isActive('/posts/create') ? styles.active : ''}`}
+                onClick={closeMenu}
+              >
+                <FiPlus size={16} />
+                {t('nav.createPost')}
+              </Link>
+            )}
+
+            {isAuthenticated && (
+              <Link
+                to="/bookmarks"
+                className={`${styles.iconLink} ${isActive('/bookmarks') ? styles.active : ''}`}
+                onClick={closeMenu}
+              >
+                <FiBookmark size={18} />
+                {bookmarksCount > 0 && (
+                  <span className={styles.badge}>{bookmarksCount}</span>
+                )}
+              </Link>
+            )}
+
+            <Link
+              to="/analytics"
+              className={`${styles.iconLink} ${isActive('/analytics') ? styles.active : ''}`}
+              onClick={closeMenu}
+            >
+              <FiBarChart2 size={18} />
+            </Link>
+
             <Link
               to="/about"
-              className={location.pathname === "/about" ? styles.active : ""}
+              className={isActive('/about') ? styles.active : ''}
               onClick={closeMenu}
             >
-              Hakkında
+              {t('nav.about')}
             </Link>
+
             <Link
               to="/contact"
-              className={location.pathname === "/contact" ? styles.active : ""}
+              className={isActive('/contact') ? styles.active : ''}
               onClick={closeMenu}
             >
-              İletişim
+              {t('nav.contact')}
             </Link>
-            <a
-              href="https://github.com/zexy2"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.githubButton}
-              onClick={closeMenu}
-            >
-              GitHub
-            </a>
-            <button onClick={toggleTheme} className={styles.themeToggle}>
-              {theme === "light" ? "🌙" : "🌞"}
-            </button>
+
+            {/* Actions */}
+            <div className={styles.actions}>
+              {/* Auth Links */}
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/profile"
+                    className={`${styles.iconLink} ${isActive('/profile') ? styles.active : ''}`}
+                    onClick={closeMenu}
+                    title={user?.user_metadata?.full_name || t('user.profile')}
+                  >
+                    <FiUser size={18} />
+                  </Link>
+                  <button
+                    onClick={() => { handleLogout(); closeMenu(); }}
+                    className={styles.logoutButton}
+                    title={t('auth.logout')}
+                  >
+                    <FiLogOut size={18} />
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/auth/login"
+                  className={styles.loginButton}
+                  onClick={closeMenu}
+                >
+                  <FiLogIn size={16} />
+                  {t('auth.login')}
+                </Link>
+              )}
+
+              <LanguageSwitcher />
+
+              <a
+                href="https://github.com/zexy2"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.githubButton}
+                onClick={closeMenu}
+              >
+                <FiGithub size={18} />
+              </a>
+
+              <button onClick={toggleTheme} className={styles.themeToggle}>
+                {theme === 'light' ? '🌙' : '🌞'}
+              </button>
+            </div>
           </nav>
         </div>
       </div>
