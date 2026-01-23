@@ -5,31 +5,23 @@
 ![Redux](https://img.shields.io/badge/Redux_Toolkit-2.8-764ABC?style=flat-square&logo=redux)
 ![React Query](https://img.shields.io/badge/TanStack_Query-5-FF4154?style=flat-square&logo=reactquery)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
-![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?style=flat-square&logo=pwa)
 
-A modern, production-ready blog application built with React 19 and cutting-edge technologies. Features a clean architecture with proper separation of concerns, comprehensive state management, and professional development practices.
+Modern blog uygulaması. React 19, Redux Toolkit ve TanStack Query kullanılarak geliştirildi.
 
-🔗 **Live Demo:** [https://zexy2.github.io/react-blog-app](https://zexy2.github.io/react-blog-app)
+**Demo:** [https://zexy2.github.io/react-blog-app](https://zexy2.github.io/react-blog-app)
 
----
+## Features
 
-## ✨ Features
+- Post CRUD operations with rich text editor (TipTap)
+- Bookmark system with localStorage persistence
+- Multi-language support (TR/EN)
+- Analytics dashboard with Recharts
+- Dark/Light theme
+- Debounced search
+- PWA support
+- Unit tests with Vitest
 
-| Feature | Description |
-|---------|-------------|
-| 📝 **CRUD Operations** | Create, read, update posts with rich text editor |
-| 🔖 **Bookmarks** | Save favorite posts with persistent storage |
-| 🌍 **i18n Support** | Multi-language support (Turkish & English) |
-| 📊 **Analytics Dashboard** | Visual insights with interactive charts |
-| 🎨 **Rich Text Editor** | TipTap-powered editor with formatting tools |
-| 🌙 **Theme Toggle** | Dark/Light mode with system preference detection |
-| 🔍 **Smart Search** | Debounced search across posts and authors |
-| 📱 **PWA Ready** | Installable app with offline support |
-| ✅ **Unit Tests** | Comprehensive test coverage with Vitest |
-
----
-
-## 🏗️ Architecture
+## Project Structure
 
 ```
 src/
@@ -81,79 +73,51 @@ src/
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-### Core
-- **React 19** - Latest React with concurrent features
-- **React Router 7** - Client-side routing
-- **Vite 7** - Next-generation build tool
+**Core:** React 19, React Router 7, Vite 7
 
-### State Management
-- **Redux Toolkit** - Predictable state container
-- **Redux Persist** - State persistence
-- **TanStack Query v5** - Server state management with caching
+**State:** Redux Toolkit, Redux Persist, TanStack Query v5
 
-### UI & Styling
-- **CSS Modules** - Scoped styling
-- **TipTap** - Headless rich text editor
-- **Recharts** - Composable charting library
-- **React Icons** - Icon library
-- **React Hot Toast** - Notifications
+**UI:** CSS Modules, TipTap, Recharts, React Icons, React Hot Toast
 
-### Internationalization
-- **i18next** - Full i18n support
-- **react-i18next** - React bindings
+**i18n:** i18next, react-i18next
 
-### Testing
-- **Vitest** - Fast unit testing
-- **React Testing Library** - Component testing
-- **Testing Library User Event** - User interaction simulation
+**Testing:** Vitest, React Testing Library
 
-### PWA & Build
-- **Vite PWA Plugin** - PWA generation
-- **Workbox** - Service worker & caching
+**PWA:** Vite PWA Plugin, Workbox
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
-### Prerequisites
-- Node.js 18+ 
-- npm 9+
-
-### Installation
+Requirements: Node.js 18+, npm 9+
 
 ```bash
-# Clone the repository
 git clone https://github.com/zexy2/react-blog-app.git
 cd react-blog-app
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Dev server runs at [http://localhost:5173](http://localhost:5173)
 
-### Available Scripts
+### Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run test` | Run unit tests |
-| `npm run test:coverage` | Run tests with coverage |
-| `npm run lint` | Lint codebase |
+```bash
+npm run dev          # development server
+npm run build        # production build
+npm run preview      # preview build
+npm run test         # run tests
+npm run test:coverage # coverage report
+npm run lint         # lint code
+```
 
 ---
 
-## 📁 Key Patterns
+## Usage Examples
 
-### Custom Hooks
-All data fetching and state logic is abstracted into custom hooks for reusability:
+Custom hooks:
 
 ```javascript
 const { posts, isLoading, error } = usePosts();
@@ -161,107 +125,57 @@ const { bookmarks, addBookmark, removeBookmark } = useBookmarks();
 const { theme, toggleTheme } = useTheme();
 ```
 
-### Service Layer
-API calls are centralized in service modules with proper error handling:
+Service layer:
 
 ```javascript
-// services/postService.js
 export const postService = {
   getAll: (params) => api.get('/posts', { params }),
   getById: (id) => api.get(`/posts/${id}`),
   create: (data) => api.post('/posts', data),
-  // ...
 };
 ```
 
-### Query Key Factory
-React Query keys are organized with a factory pattern:
+Query keys:
 
 ```javascript
 export const postKeys = {
   all: ['posts'],
   lists: () => [...postKeys.all, 'list'],
   list: (filters) => [...postKeys.lists(), filters],
-  details: () => [...postKeys.all, 'detail'],
-  detail: (id) => [...postKeys.details(), id],
+  detail: (id) => [...postKeys.all, 'detail', id],
 };
 ```
 
 ---
 
-## 🧪 Testing
-
-The project includes comprehensive unit tests:
+## Testing
 
 ```bash
-# Run tests
 npm run test
-
-# Run with UI
 npm run test -- --ui
-
-# Generate coverage report
 npm run test:coverage
 ```
 
-### Test Structure
-```
-src/
-├── hooks/
-│   ├── useBookmarks.test.jsx
-│   └── useDebounce.test.jsx
-├── components/
-│   └── PostCard.test.jsx
-└── test/
-    ├── setup.js          # Test configuration
-    └── utils.jsx         # Test utilities
-```
+---
+
+## i18n
+
+Supports Turkish and English. Language preference stored in localStorage.
 
 ---
 
-## 🌐 Internationalization
+## API
 
-The app supports multiple languages with i18next:
-
-- 🇹🇷 Turkish (Türkçe)
-- 🇬🇧 English
-
-Language preference is persisted in localStorage and syncs across tabs.
+Uses [JSONPlaceholder](https://jsonplaceholder.typicode.com/) for demo data. Replace endpoints in `/src/services/` for production.
 
 ---
 
-## 📊 Analytics Dashboard
+## License
 
-Visual insights powered by Recharts:
-- Post distribution by author
-- Engagement metrics
-- Trend analysis
-- Interactive charts (Bar, Pie, Line)
+MIT
 
 ---
 
-## 🔐 Data Source
+## Author
 
-This application uses [JSONPlaceholder](https://jsonplaceholder.typicode.com/) as a demo API. In a production environment, you would replace the API endpoints in `/src/services/` with your actual backend.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 👤 Author
-
-**Zeki Akgül**
-
-- GitHub: [@zexy2](https://github.com/zexy2)
-
----
-
-## 🙏 Acknowledgments
-
-- [JSONPlaceholder](https://jsonplaceholder.typicode.com/) for the demo API
-- [TipTap](https://tiptap.dev/) for the rich text editor
-- [Recharts](https://recharts.org/) for the charting library
+**Zeki Akgül** - [@zexy2](https://github.com/zexy2)
