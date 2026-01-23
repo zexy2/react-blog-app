@@ -119,7 +119,7 @@ const HomePage = () => {
           </div>
           <h3 style={{ marginBottom: 'var(--space-sm)' }}>{t('common.error')}</h3>
           <p style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-lg)' }}>
-            {error?.message || 'Bir hata oluştu'}
+            {error?.message || t('common.error')}
           </p>
           <button
             onClick={() => window.location.reload()}

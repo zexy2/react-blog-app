@@ -10,7 +10,7 @@ import { setLanguage, selectLanguage } from '../../store/slices/uiSlice';
 import styles from './LanguageSwitcher.module.css';
 
 const LanguageSwitcher = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const dispatch = useDispatch();
   const currentLanguage = useSelector(selectLanguage);
 
@@ -24,7 +24,7 @@ const LanguageSwitcher = () => {
     <button
       onClick={toggleLanguage}
       className={styles.button}
-      title={currentLanguage === 'tr' ? 'Switch to English' : 'Türkçe\'ye geç'}
+      title={t('theme.toggle')}
     >
       <span className={`${styles.flag} ${currentLanguage === 'tr' ? styles.active : ''}`}>
         🇹🇷

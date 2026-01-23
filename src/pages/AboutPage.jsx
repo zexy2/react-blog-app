@@ -1,6 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const AboutPage = () => {
+  const { t } = useTranslation();
+  
   return (
     <div className="container" style={{ marginTop: 32, marginBottom: 32 }}>
       <div
@@ -12,7 +15,7 @@ const AboutPage = () => {
         }}
       >
         <h1 style={{ fontWeight: 800, fontSize: "2.2rem", marginBottom: 24 }}>
-          Hakkında
+          {t('about.title')}
         </h1>
         <div
           style={{
@@ -21,17 +24,8 @@ const AboutPage = () => {
             color: "var(--text-secondary)",
           }}
         >
-          <p style={{ marginBottom: 20 }}>
-            Postify Blog, yazılım ve teknoloji dünyasında güncel içerikler
-            sunmak amacıyla hazırlanmış modern bir blog platformudur.
-          </p>
-          <p style={{ marginBottom: 20 }}>
-            Bu projede, React ve JSONPlaceholder API kullanılarak çok sayfalı,
-            kullanıcı ve yorum destekli bir blog uygulaması geliştirilmiştir.
-          </p>
           <p style={{ marginBottom: 24 }}>
-            Amacımız, yazılım öğrenenler ve teknoloji meraklıları için sade,
-            hızlı ve ilham verici bir deneyim sunmaktır.
+            {t('about.description')}
           </p>
           <div style={{ marginBottom: 24 }}>
             <h3
@@ -42,7 +36,7 @@ const AboutPage = () => {
                 color: "var(--text-primary)",
               }}
             >
-              Kullanılan Teknolojiler:
+              {t('about.technologies')}:
             </h3>
             <ul style={{ listStyle: "none", padding: 0 }}>
               <li

@@ -38,7 +38,7 @@ const BookmarksPage = () => {
         <header className={styles.header}>
           <div className={styles.headerLeft}>
             <h1 className={styles.title}>{t('bookmarks.title')}</h1>
-            <span className={styles.count}>{bookmarksCount} yazı</span>
+            <span className={styles.count}>{bookmarksCount} {t('posts.title').toLowerCase()}</span>
           </div>
           <button onClick={clearAll} className={styles.clearButton}>
             <FiTrash2 />
@@ -57,7 +57,7 @@ const BookmarksPage = () => {
               </Link>
               <div className={styles.cardFooter}>
                 <Link to={`/users/${post.userId}`} className={styles.author}>
-                  {post.authorName || `Yazar #${post.userId}`}
+                  {post.authorName || `${t('posts.author')} #${post.userId}`}
                 </Link>
                 <button
                   onClick={() => remove(post.id)}

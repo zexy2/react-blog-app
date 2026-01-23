@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import axios from "axios";
 
 const PostDetailPage = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [user, setUser] = useState(null);
@@ -135,7 +137,7 @@ const PostDetailPage = () => {
               marginBottom: "10px",
             }}
           >
-            Yazı Detayları Yükleniyor...
+            {t('common.loading')}
           </div>
           <div
             style={{
@@ -242,7 +244,7 @@ const PostDetailPage = () => {
                 color: "var(--text-muted)",
               }}
             >
-              • Yazar Profili
+              • {t('posts.author')}
             </span>
           </Link>
         </div>
@@ -278,7 +280,7 @@ const PostDetailPage = () => {
             gap: "8px",
           }}
         >
-          Yorumlar
+          {t('posts.comments')}
           <span
             style={{
               fontSize: "1rem",

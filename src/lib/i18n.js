@@ -28,6 +28,7 @@ const resources = {
         error: 'Bir hata oluştu',
         retry: 'Tekrar Dene',
         save: 'Kaydet',
+        saved: 'Kaydedildi',
         cancel: 'İptal',
         delete: 'Sil',
         edit: 'Düzenle',
@@ -103,6 +104,7 @@ const resources = {
         github: 'GitHub',
         linkedin: 'LinkedIn',
         email: 'E-posta',
+        responseMessage: 'Size en kısa sürede geri dönüş yapmaya çalışacağım!',
       },
       // Theme
       theme: {
@@ -253,6 +255,7 @@ const resources = {
         error: 'An error occurred',
         retry: 'Retry',
         save: 'Save',
+        saved: 'Saved',
         cancel: 'Cancel',
         delete: 'Delete',
         edit: 'Edit',
@@ -328,6 +331,7 @@ const resources = {
         github: 'GitHub',
         linkedin: 'LinkedIn',
         email: 'Email',
+        responseMessage: 'I will try to get back to you as soon as possible!',
       },
       // Theme
       theme: {

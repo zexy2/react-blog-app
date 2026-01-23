@@ -169,7 +169,7 @@ const UserPage = () => {
             }}
           >
             <strong style={{ color: "var(--text-primary)" }}>
-              Kullanıcı Adı:
+              {t('auth.username')}:
             </strong>
             <span>{user.username}</span>
 
@@ -181,7 +181,7 @@ const UserPage = () => {
               {user.email}
             </a>
 
-            <strong style={{ color: "var(--text-primary)" }}>Şehir:</strong>
+            <strong style={{ color: "var(--text-primary)" }}>{t('user.address')}:</strong>
             <span>{user.address?.city}</span>
 
             <strong style={{ color: "var(--text-primary)" }}>Website:</strong>
@@ -207,7 +207,7 @@ const UserPage = () => {
           textAlign: "center",
         }}
       >
-        {user.name} Adlı Yazarın Yazıları ({posts.length})
+        {user.name} - {t('user.posts')} ({posts.length})
       </h2>
       <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         {posts.map((post) => (

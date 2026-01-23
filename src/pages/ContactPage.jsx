@@ -1,6 +1,9 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const ContactPage = () => {
+  const { t } = useTranslation();
+  
   return (
     <div className="container" style={{ marginTop: 32, marginBottom: 32 }}>
       <div
@@ -12,7 +15,7 @@ const ContactPage = () => {
         }}
       >
         <h1 style={{ fontWeight: 800, fontSize: "2.2rem", marginBottom: 24 }}>
-          İletişim
+          {t('contact.title')}
         </h1>
         <div
           style={{
@@ -22,8 +25,7 @@ const ContactPage = () => {
           }}
         >
           <p style={{ marginBottom: 24 }}>
-            Blog ile ilgili görüş, öneri veya iş birliği talepleriniz için
-            aşağıdaki kanallardan bana ulaşabilirsiniz:
+            {t('contact.description')}
           </p>
           <div style={{ marginBottom: 32 }}>
             <div
@@ -107,7 +109,7 @@ const ContactPage = () => {
                     color: "var(--text-primary)",
                   }}
                 >
-                  E-posta:
+                  {t('contact.email')}:
                 </strong>
                 <a
                   href="mailto:zekiakgul09@gmail.com"
@@ -127,7 +129,7 @@ const ContactPage = () => {
             }}
           >
             <p style={{ margin: 0, fontWeight: 600, color: "#2196f3" }}>
-              Size en kısa sürede geri dönüş yapmaya çalışacağım!
+              {t('contact.responseMessage')}
             </p>
           </div>
         </div>

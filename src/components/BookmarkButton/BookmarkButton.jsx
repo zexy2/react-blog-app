@@ -4,11 +4,13 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FiBookmark } from 'react-icons/fi';
 import { useBookmarks } from '../../hooks/useBookmarks';
 import styles from './BookmarkButton.module.css';
 
 const BookmarkButton = ({ post, size = 'medium', showText = false }) => {
+  const { t } = useTranslation();
   const { isBookmarked, toggle } = useBookmarks();
   const isActive = isBookmarked(post.id);
 
@@ -24,13 +26,13 @@ const BookmarkButton = ({ post, size = 'medium', showText = false }) => {
     <button
       onClick={handleClick}
       className={`${styles.button} ${sizeClass} ${isActive ? styles.active : ''}`}
-      title={isActive ? 'Favorilerden kaldır' : 'Favorilere ekle'}
-      aria-label={isActive ? 'Favorilerden kaldır' : 'Favorilere ekle'}
+      title={isActive ? t('bookmarks.removeFromBookmarks') : t('bookmarks.addToBookmarks')}
+      aria-label={isActive ? t('bookmarks.removeFromBookmarks') : t('bookmarks.addToBookmarks')}
     >
       <FiBookmark className={styles.icon} />
       {showText && (
         <span className={styles.text}>
-          {isActive ? 'Kaydedildi' : 'Kaydet'}
+          {isActive ? t('common.saved') : t('common.save')}
         </span>
       )}
     </button>
