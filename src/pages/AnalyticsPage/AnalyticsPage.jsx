@@ -72,7 +72,7 @@ const AnalyticsPage = () => {
     const topAuthors = postsByAuthor.slice(0, 5);
 
     // Simulate posts over time data
-    const months = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
     const postsOverTime = months.map((month, index) => ({
       name: month,
       posts: Math.floor(posts.length / 6) + Math.floor(Math.random() * 5),
@@ -106,7 +106,7 @@ const AnalyticsPage = () => {
         <header className={styles.header}>
           <h1 className={styles.title}>{t('analytics.title')}</h1>
           <p className={styles.subtitle}>
-            Blog istatistiklerinizi ve performansınızı takip edin
+            {t('analytics.subtitle')}
           </p>
         </header>
 

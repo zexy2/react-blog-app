@@ -86,7 +86,7 @@ const AboutPage = () => {
             }}
           >
             <p style={{ margin: 0, fontWeight: 600, color: "#007bff" }}>
-              Proje sahibi:{" "}
+              {t('about.projectOwner')}:{" "}
               <a
                 href="https://github.com/zexy2"
                 target="_blank"

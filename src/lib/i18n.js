@@ -72,6 +72,7 @@ const resources = {
       // Analytics
       analytics: {
         title: 'İstatistikler',
+        subtitle: 'Blog istatistiklerinizi ve performansınızı takip edin',
         totalPosts: 'Toplam Yazı',
         totalAuthors: 'Toplam Yazar',
         totalComments: 'Toplam Yorum',
@@ -96,6 +97,7 @@ const resources = {
         description: 'Postify Blog, modern web teknolojileri ile geliştirilmiş, profesyonel bir blog platformudur.',
         technologies: 'Kullanılan Teknolojiler',
         features: 'Özellikler',
+        projectOwner: 'Proje sahibi',
       },
       // Contact
       contact: {
@@ -299,6 +301,7 @@ const resources = {
       // Analytics
       analytics: {
         title: 'Analytics',
+        subtitle: 'Track your blog statistics and performance',
         totalPosts: 'Total Posts',
         totalAuthors: 'Total Authors',
         totalComments: 'Total Comments',
@@ -323,6 +326,7 @@ const resources = {
         description: 'Postify Blog is a professional blog platform built with modern web technologies.',
         technologies: 'Technologies Used',
         features: 'Features',
+        projectOwner: 'Project owner',
       },
       // Contact
       contact: {
