@@ -48,7 +48,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Provider store={store}>
         <PersistGate loading={<LoadingScreen />} persistor={persistor}>
           <QueryClientProvider client={queryClient}>
-            <BrowserRouter basename="/react-blog-app">
+            <BrowserRouter basename="/Blog-app-with-React-and-Redux">
               <App />
               <Toaster
                 position="bottom-right"
