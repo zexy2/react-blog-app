@@ -1,1 +1,1 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/react-blog-app/sw.js', { scope: '/react-blog-app/' })})}
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/Blog-app-with-React-and-Redux/sw.js', { scope: '/Blog-app-with-React-and-Redux/' })})}

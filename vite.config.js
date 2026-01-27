@@ -17,8 +17,8 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        scope: '/react-blog-app/',
-        start_url: '/react-blog-app/',
+        scope: '/Blog-app-with-React-and-Redux/',
+        start_url: '/Blog-app-with-React-and-Redux/',
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -59,7 +59,7 @@ export default defineConfig({
       },
     }),
   ],
-  base: '/react-blog-app/',
+  base: '/Blog-app-with-React-and-Redux/',
   build: {
     outDir: 'docs',
     assetsDir: 'assets',
