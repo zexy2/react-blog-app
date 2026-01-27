@@ -1,0 +1,49 @@
+/**
+ * ReadingProgress Styles
+ */
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: transparent;
+  pointer-events: none;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 0 2px 2px 0;
+  transition: width 50ms ease-out;
+  will-change: width;
+}
+
+.glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  filter: blur(8px);
+  opacity: 0.6;
+  border-radius: 0 2px 2px 0;
+  transition: width 50ms ease-out;
+  will-change: width;
+}
+
+/* Dark mode enhancement */
+[data-theme='dark'] .bar {
+  box-shadow: 0 0 10px currentColor;
+}
+
+[data-theme='dark'] .glow {
+  opacity: 0.4;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .glow {
+    transition: none;
+  }
+}

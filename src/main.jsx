@@ -15,8 +15,10 @@ import { Toaster } from 'react-hot-toast';
 import App from './App';
 import { store, persistor } from './store';
 import { queryClient } from './lib/queryClient';
+import { SmoothScrollProvider } from './providers';
 import './lib/i18n'; // Initialize i18n
 import './index.css';
+import 'lenis/dist/lenis.css'; // Lenis styles
 
 // Loading component for PersistGate
 const LoadingScreen = () => (
@@ -49,7 +51,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <PersistGate loading={<LoadingScreen />} persistor={persistor}>
           <QueryClientProvider client={queryClient}>
             <BrowserRouter basename="/Blog-app-with-React-and-Redux">
-              <App />
+              <SmoothScrollProvider>
+                <App />
+              </SmoothScrollProvider>
               <Toaster
                 position="bottom-right"
                 toastOptions={{

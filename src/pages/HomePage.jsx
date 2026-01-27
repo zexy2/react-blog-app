@@ -1,22 +1,34 @@
 /**
  * HomePage Component
- * Modern blog homepage with hero section and grid layout
+ * Premium blog homepage with Hero and Bento Grid layout
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { FiPlus, FiSearch, FiArrowRight, FiTrendingUp } from 'react-icons/fi';
-import PostCard from '../components/PostCard/PostCard';
+import { motion } from 'framer-motion';
+
+// Components
+import Hero from '../components/Hero';
+import BentoGrid from '../components/BentoGrid';
+import ScrollReveal from '../components/ScrollReveal';
+
+// Hooks & State
 import { usePosts } from '../hooks/usePosts';
 import { useSearch } from '../hooks/useSearch';
+import { useBookmarks } from '../hooks/useBookmarks';
+
+// Styles
+import styles from './HomePage.module.css';
 
 const HomePage = () => {
   const { t } = useTranslation();
   const { posts, usersMap, isLoading, isError, error } = usePosts();
-  const { query, debouncedQuery } = useSearch();
+  const { query, debouncedQuery, setQuery } = useSearch();
   const { isAuthenticated } = useSelector((state) => state.user);
+  const { bookmarkedIds, toggleBookmark } = useBookmarks();
 
   // Filter posts based on search
   const filteredPosts = useMemo(() => {
@@ -39,57 +51,23 @@ const HomePage = () => {
     });
   }, [posts, usersMap, debouncedQuery]);
 
+  // Handle bookmark toggle
+  const handleBookmarkToggle = useCallback((post) => {
+    toggleBookmark(post);
+  }, [toggleBookmark]);
+
   // Loading State
   if (isLoading) {
     return (
-      <div className="container" style={{ padding: 'var(--space-3xl) 0' }}>
-        <div className="animate-pulse" style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-          gap: 'var(--space-lg)',
-        }}>
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} style={{
-              background: 'var(--bg-secondary)',
-              borderRadius: 'var(--radius-xl)',
-              padding: 'var(--space-xl)',
-              height: '280px',
-            }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--space-md)',
-                marginBottom: 'var(--space-lg)',
-              }}>
-                <div style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: 'var(--radius-lg)',
-                  background: 'var(--bg-tertiary)',
-                }} />
-                <div style={{ flex: 1 }}>
-                  <div style={{
-                    height: '20px',
-                    background: 'var(--bg-tertiary)',
-                    borderRadius: 'var(--radius-sm)',
-                    marginBottom: 'var(--space-sm)',
-                  }} />
-                  <div style={{
-                    height: '14px',
-                    width: '60%',
-                    background: 'var(--bg-tertiary)',
-                    borderRadius: 'var(--radius-sm)',
-                  }} />
-                </div>
-              </div>
-              <div style={{
-                height: '60px',
-                background: 'var(--bg-tertiary)',
-                borderRadius: 'var(--radius-md)',
-              }} />
-            </div>
-          ))}
-        </div>
+      <div className={styles.page}>
+        <Hero 
+          title="Postify" 
+          subtitle={t('home.subtitle', 'Discover stories, insights, and ideas')}
+          showSearch={false}
+        />
+        <section className={`container ${styles.section}`}>
+          <BentoGrid posts={[]} isLoading={true} />
+        </section>
       </div>
     );
   }
@@ -97,315 +75,146 @@ const HomePage = () => {
   // Error State
   if (isError) {
     return (
-      <div className="container" style={{ padding: 'var(--space-3xl) 0', textAlign: 'center' }}>
-        <div style={{
-          background: 'var(--bg-secondary)',
-          borderRadius: 'var(--radius-xl)',
-          padding: 'var(--space-3xl)',
-          maxWidth: '500px',
-          margin: '0 auto',
-        }}>
-          <div style={{
-            width: '64px',
-            height: '64px',
-            background: 'var(--error-light)',
-            borderRadius: 'var(--radius-full)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto var(--space-lg)',
-          }}>
-            <span style={{ fontSize: '28px' }}>😕</span>
+      <div className={styles.page}>
+        <div className="container">
+          <div className={styles.errorCard}>
+            <div className={styles.errorIcon}>😕</div>
+            <h3>{t('common.error')}</h3>
+            <p>{error?.message || 'An error occurred'}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className={styles.retryButton}
+            >
+              {t('common.retry')}
+            </button>
           </div>
-          <h3 style={{ marginBottom: 'var(--space-sm)' }}>{t('common.error')}</h3>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-lg)' }}>
-            {error?.message || t('common.error')}
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            style={{
-              padding: 'var(--space-sm) var(--space-xl)',
-              background: 'var(--gradient-primary)',
-              color: 'white',
-              border: 'none',
-              borderRadius: 'var(--radius-md)',
-              fontWeight: '600',
-              cursor: 'pointer',
-            }}
-          >
-            {t('common.retry')}
-          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div>
+    <div className={styles.page}>
       {/* Hero Section - Only show when not searching */}
       {!query && (
-        <section style={{
-          position: 'relative',
-          padding: 'var(--space-3xl) 0',
-          overflow: 'hidden',
-        }}>
-          <div className="container">
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: 'var(--space-2xl)',
-              alignItems: 'center',
-            }}>
-              {/* Hero Text */}
-              <div className="animate-fadeInUp">
-                <span style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 'var(--space-sm)',
-                  padding: 'var(--space-xs) var(--space-md)',
-                  background: 'var(--primary-light)',
-                  color: 'var(--primary)',
-                  borderRadius: 'var(--radius-full)',
-                  fontSize: 'var(--text-sm)',
-                  fontWeight: '600',
-                  marginBottom: 'var(--space-lg)',
-                }}>
-                  <FiTrendingUp size={14} />
-                  {t('posts.latestPosts')}
-                </span>
-                
-                <h1 style={{
-                  fontSize: 'clamp(2.5rem, 6vw, 4rem)',
-                  fontWeight: '800',
-                  lineHeight: '1.1',
-                  marginBottom: 'var(--space-lg)',
-                  letterSpacing: '-0.03em',
-                }}>
-                  <span style={{
-                    background: 'var(--gradient-primary)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}>
-                    Postify
-                  </span>
-                  <br />
-                  Blog
-                </h1>
-                
-                <p style={{
-                  fontSize: 'var(--text-lg)',
-                  color: 'var(--text-secondary)',
-                  lineHeight: '1.7',
-                  marginBottom: 'var(--space-xl)',
-                  maxWidth: '500px',
-                }}>
-                  {t('about.description')}
-                </p>
-                
-                <div style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  gap: 'var(--space-md)',
-                }}>
-                  {isAuthenticated ? (
-                    <Link
-                      to="/posts/create"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: 'var(--space-sm)',
-                        padding: 'var(--space-md) var(--space-xl)',
-                        background: 'var(--gradient-primary)',
-                        color: 'white',
-                        textDecoration: 'none',
-                        borderRadius: 'var(--radius-lg)',
-                        fontWeight: '600',
-                        fontSize: 'var(--text-base)',
-                        boxShadow: 'var(--shadow-lg), 0 8px 32px rgba(59, 130, 246, 0.25)',
-                        transition: 'all var(--transition-fast)',
-                      }}
-                    >
-                      <FiPlus size={20} />
-                      {t('posts.createPost')}
-                    </Link>
-                  ) : (
-                    <Link
-                      to="/auth/register"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: 'var(--space-sm)',
-                        padding: 'var(--space-md) var(--space-xl)',
-                        background: 'var(--gradient-primary)',
-                        color: 'white',
-                        textDecoration: 'none',
-                        borderRadius: 'var(--radius-lg)',
-                        fontWeight: '600',
-                        fontSize: 'var(--text-base)',
-                        boxShadow: 'var(--shadow-lg), 0 8px 32px rgba(59, 130, 246, 0.25)',
-                        transition: 'all var(--transition-fast)',
-                      }}
-                    >
-                      {t('auth.register')}
-                      <FiArrowRight size={18} />
-                    </Link>
-                  )}
-                  
-                  <Link
-                    to="/about"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 'var(--space-sm)',
-                      padding: 'var(--space-md) var(--space-xl)',
-                      background: 'var(--bg-secondary)',
-                      color: 'var(--text-primary)',
-                      textDecoration: 'none',
-                      borderRadius: 'var(--radius-lg)',
-                      fontWeight: '600',
-                      fontSize: 'var(--text-base)',
-                      border: '1px solid var(--border-color)',
-                      transition: 'all var(--transition-fast)',
-                    }}
-                  >
-                    {t('nav.about')}
-                  </Link>
-                </div>
-              </div>
-              
-              {/* Stats Cards */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: 'var(--space-md)',
-              }} className="animate-fadeInUp" >
-                {[
-                  { label: t('analytics.totalPosts'), value: posts.length, icon: '📝' },
-                  { label: t('analytics.totalAuthors'), value: Object.keys(usersMap).length, icon: '✍️' },
-                  { label: t('analytics.totalComments'), value: posts.length * 5, icon: '💬' },
-                  { label: t('bookmarks.title'), value: '∞', icon: '🔖' },
-                ].map((stat, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      background: 'var(--bg-secondary)',
-                      border: '1px solid var(--border-color)',
-                      borderRadius: 'var(--radius-xl)',
-                      padding: 'var(--space-xl)',
-                      textAlign: 'center',
-                      transition: 'all var(--transition-base)',
-                    }}
-                    className="card"
-                  >
-                    <span style={{ fontSize: '2rem', marginBottom: 'var(--space-sm)', display: 'block' }}>
-                      {stat.icon}
-                    </span>
-                    <div style={{
-                      fontSize: 'var(--text-3xl)',
-                      fontWeight: '800',
-                      color: 'var(--text-primary)',
-                      marginBottom: 'var(--space-xs)',
-                    }}>
-                      {stat.value}
-                    </div>
-                    <div style={{
-                      fontSize: 'var(--text-sm)',
-                      color: 'var(--text-muted)',
-                    }}>
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
+        <Hero
+          title="Postify"
+          subtitle={t('about.description', 'A modern blog platform for sharing ideas and stories')}
+          showSearch={true}
+          searchValue={query}
+          onSearchChange={setQuery}
+        />
+      )}
+
+      {/* Stats Section */}
+      {!query && (
+        <section className={`container ${styles.statsSection}`}>
+          <ScrollReveal animation="fadeUp" delay={0.2}>
+            <div className={styles.statsGrid}>
+              {[
+                { label: t('analytics.totalPosts'), value: posts.length, icon: '📝' },
+                { label: t('analytics.totalAuthors'), value: Object.keys(usersMap).length, icon: '✍️' },
+                { label: t('analytics.totalComments'), value: posts.length * 5, icon: '💬' },
+                { label: t('bookmarks.title'), value: bookmarkedIds.length || '∞', icon: '🔖' },
+              ].map((stat, i) => (
+                <motion.div
+                  key={i}
+                  className={styles.statCard}
+                  whileHover={{ y: -4, scale: 1.02 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <span className={styles.statIcon}>{stat.icon}</span>
+                  <div className={styles.statValue}>{stat.value}</div>
+                  <div className={styles.statLabel}>{stat.label}</div>
+                </motion.div>
+              ))}
             </div>
-          </div>
+          </ScrollReveal>
+        </section>
+      )}
+
+      {/* CTA Section */}
+      {!query && (
+        <section className={`container ${styles.ctaSection}`}>
+          <ScrollReveal animation="fadeUp" delay={0.3}>
+            <div className={styles.ctaWrapper}>
+              {isAuthenticated ? (
+                <Link to="/posts/create" className={styles.ctaPrimary}>
+                  <FiPlus size={20} />
+                  {t('posts.createPost')}
+                </Link>
+              ) : (
+                <Link to="/auth/register" className={styles.ctaPrimary}>
+                  {t('auth.register')}
+                  <FiArrowRight size={18} />
+                </Link>
+              )}
+              <Link to="/about" className={styles.ctaSecondary}>
+                {t('nav.about')}
+              </Link>
+            </div>
+          </ScrollReveal>
         </section>
       )}
 
       {/* Posts Section */}
-      <section className="container" style={{ paddingBottom: 'var(--space-3xl)' }}>
+      <section className={`container ${styles.postsSection}`}>
         {/* Section Header */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 'var(--space-xl)',
-          flexWrap: 'wrap',
-          gap: 'var(--space-md)',
-        }}>
-          <div>
-            <h2 style={{
-              fontSize: 'var(--text-2xl)',
-              fontWeight: '700',
-              marginBottom: 'var(--space-xs)',
-            }}>
-              {query ? `"${query}" ${t('common.search')}` : t('posts.allPosts')}
-            </h2>
-            <p style={{
-              color: 'var(--text-muted)',
-              fontSize: 'var(--text-sm)',
-            }}>
-              {filteredPosts.length} {t('posts.title').toLowerCase()}
-            </p>
+        <ScrollReveal animation="fadeUp">
+          <div className={styles.sectionHeader}>
+            <div>
+              <h2 className={styles.sectionTitle}>
+                {query ? (
+                  <>
+                    <FiSearch size={24} />
+                    "{query}"
+                  </>
+                ) : (
+                  <>
+                    <FiTrendingUp size={24} />
+                    {t('posts.latestPosts')}
+                  </>
+                )}
+              </h2>
+              <p className={styles.sectionSubtitle}>
+                {filteredPosts.length} {t('posts.title').toLowerCase()}
+              </p>
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* No Results */}
         {filteredPosts.length === 0 && query && (
-          <div style={{
-            textAlign: 'center',
-            padding: 'var(--space-3xl)',
-            background: 'var(--bg-secondary)',
-            borderRadius: 'var(--radius-xl)',
-            border: '1px solid var(--border-color)',
-          }}>
-            <FiSearch size={48} style={{ color: 'var(--text-muted)', marginBottom: 'var(--space-lg)' }} />
-            <h3 style={{ marginBottom: 'var(--space-sm)' }}>{t('common.noResults')}</h3>
-            <p style={{ color: 'var(--text-secondary)' }}>
-              "{query}" {t('common.noResultsFor')}
-            </p>
-          </div>
+          <ScrollReveal animation="scaleIn">
+            <div className={styles.noResults}>
+              <FiSearch size={48} />
+              <h3>{t('common.noResults')}</h3>
+              <p>"{query}" {t('common.noResultsFor')}</p>
+            </div>
+          </ScrollReveal>
         )}
 
-        {/* Posts Grid - Bento Style */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
-          gap: 'var(--space-lg)',
-        }}>
-          {filteredPosts.slice(0, 20).map((post, index) => (
-            <div
-              key={post.id}
-              className="animate-fadeInUp"
-              style={{ animationDelay: `${index * 50}ms` }}
-            >
-              <PostCard post={post} author={usersMap[post.userId]} />
-            </div>
-          ))}
-        </div>
+        {/* Bento Grid */}
+        <BentoGrid 
+          posts={filteredPosts.slice(0, 12)} 
+          isLoading={false}
+          onBookmarkToggle={handleBookmarkToggle}
+          bookmarkedIds={bookmarkedIds}
+        />
 
         {/* Load More */}
-        {filteredPosts.length > 20 && (
-          <div style={{
-            textAlign: 'center',
-            marginTop: 'var(--space-2xl)',
-          }}>
-            <button
-              style={{
-                padding: 'var(--space-md) var(--space-2xl)',
-                background: 'var(--bg-secondary)',
-                color: 'var(--text-primary)',
-                border: '1px solid var(--border-color)',
-                borderRadius: 'var(--radius-lg)',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all var(--transition-fast)',
-              }}
-            >
-              {t('common.loadMore')}
-            </button>
-          </div>
+        {filteredPosts.length > 12 && (
+          <ScrollReveal animation="fadeUp">
+            <div className={styles.loadMore}>
+              <motion.button 
+                className={styles.loadMoreButton}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {t('common.loadMore')} ({filteredPosts.length - 12} more)
+              </motion.button>
+            </div>
+          </ScrollReveal>
         )}
       </section>
     </div>

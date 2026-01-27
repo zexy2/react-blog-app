@@ -14,6 +14,7 @@ import { supabaseAuth } from './lib/supabase';
 import Header from './components/Header/Header';
 import ErrorBoundary from './components/ErrorBoundary';
 import ProtectedRoute from './components/ProtectedRoute';
+import CustomCursor from './components/CustomCursor';
 
 // Pages
 import HomePage from './pages/HomePage';
@@ -87,6 +88,7 @@ function App() {
 
   return (
     <ErrorBoundary>
+      <CustomCursor />
       <div
         style={{
           minHeight: '100vh',

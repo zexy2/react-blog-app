@@ -1,0 +1,366 @@
+/**
+ * PostCards Shared Styles
+ * Styles for Featured, Medium, and Compact card variants
+ */
+
+/* Base Card */
+.card {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.titleLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.titleLink:hover h2,
+.titleLink:hover h3,
+.titleLink:hover h4 {
+  color: var(--primary);
+}
+
+/* ============================================
+   FEATURED CARD STYLES
+   ============================================ */
+
+.featured {
+  position: relative;
+}
+
+.featuredBackground {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.featuredOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+  z-index: 1;
+}
+
+.featuredContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  padding: var(--space-2xl);
+  color: #ffffff;
+}
+
+.meta {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-sm);
+  opacity: 0.8;
+}
+
+.featuredTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: var(--space-md);
+  text-transform: capitalize;
+  transition: color var(--transition-fast);
+}
+
+.featuredExcerpt {
+  font-size: var(--text-base);
+  line-height: 1.6;
+  opacity: 0.85;
+  margin-bottom: var(--space-xl);
+  max-width: 500px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.readMore {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-full);
+  color: #ffffff;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.readMore:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateX(4px);
+}
+
+.readMore svg {
+  transition: transform var(--transition-fast);
+}
+
+.readMore:hover svg {
+  transform: translateX(4px);
+}
+
+/* ============================================
+   MEDIUM CARD STYLES
+   ============================================ */
+
+.medium {
+  background: var(--bg-secondary);
+}
+
+.accentLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.medium:hover .accentLine {
+  opacity: 1;
+}
+
+.mediumContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--space-xl);
+}
+
+.metaSmall {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+}
+
+.dot {
+  opacity: 0.5;
+}
+
+.mediumTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-primary);
+  text-transform: capitalize;
+  margin-bottom: var(--space-md);
+  transition: color var(--transition-fast);
+  flex-grow: 0;
+}
+
+.mediumExcerpt {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  flex-grow: 1;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.readLink {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.readLink:hover {
+  opacity: 0.8;
+}
+
+/* ============================================
+   COMPACT CARD STYLES
+   ============================================ */
+
+.compact {
+  background: var(--bg-secondary);
+}
+
+.compactContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--space-lg);
+}
+
+.compactHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+[data-theme='dark'] .tag {
+  background: rgba(0, 255, 136, 0.15);
+  color: var(--primary);
+}
+
+.compactTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-primary);
+  text-transform: capitalize;
+  transition: color var(--transition-fast);
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.compactFooter {
+  margin-top: auto;
+  padding-top: var(--space-md);
+}
+
+.author {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ============================================
+   BOOKMARK BUTTON STYLES
+   ============================================ */
+
+.bookmarkBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.bookmarkBtn.small {
+  width: 32px;
+  height: 32px;
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-muted);
+}
+
+.bookmarkBtn.tiny {
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+}
+
+.bookmarkBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+.bookmarkBtn.small:hover,
+.bookmarkBtn.tiny:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.bookmarkBtn.bookmarked {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.bookmarkBtn.bookmarked svg {
+  fill: currentColor;
+}
+
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+
+@media (max-width: 768px) {
+  .featuredContent {
+    padding: var(--space-xl);
+  }
+  
+  .featuredTitle {
+    font-size: var(--text-2xl);
+  }
+  
+  .featuredExcerpt {
+    font-size: var(--text-sm);
+  }
+  
+  .mediumTitle {
+    font-size: var(--text-lg);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .accentLine,
+  .readMore,
+  .bookmarkBtn,
+  .titleLink h2,
+  .titleLink h3,
+  .titleLink h4 {
+    transition: none;
+  }
+}

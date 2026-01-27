@@ -15,17 +15,17 @@ A modern, production-ready blog application built with React 19 and cutting-edge
 
 ## ✨ Features
 
-| Feature | Description |
-|---------|-------------|
-| 📝 **CRUD Operations** | Create, read, update posts with rich text editor |
-| 🔖 **Bookmarks** | Save favorite posts with persistent storage |
-| 🌍 **i18n Support** | Multi-language support (Turkish & English) |
-| 📊 **Analytics Dashboard** | Visual insights with interactive charts |
-| 🎨 **Rich Text Editor** | TipTap-powered editor with formatting tools |
-| 🌙 **Theme Toggle** | Dark/Light mode with system preference detection |
-| 🔍 **Smart Search** | Debounced search across posts and authors |
-| 📱 **PWA Ready** | Installable app with offline support |
-| ✅ **Unit Tests** | Comprehensive test coverage with Vitest |
+| Feature                   | Description                                      |
+| ------------------------- | ------------------------------------------------ |
+| 📝 **CRUD Operations**     | Create, read, update posts with rich text editor |
+| 🔖 **Bookmarks**           | Save favorite posts with persistent storage      |
+| 🌍 **i18n Support**        | Multi-language support (Turkish & English)       |
+| 📊 **Analytics Dashboard** | Visual insights with interactive charts          |
+| 🎨 **Rich Text Editor**    | TipTap-powered editor with formatting tools      |
+| 🌙 **Theme Toggle**        | Dark/Light mode with system preference detection |
+| 🔍 **Smart Search**        | Debounced search across posts and authors        |
+| 📱 **PWA Ready**           | Installable app with offline support             |
+| ✅ **Unit Tests**          | Comprehensive test coverage with Vitest          |
 
 ---
 
@@ -139,14 +139,14 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ### Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run test` | Run unit tests |
-| `npm run test:coverage` | Run tests with coverage |
-| `npm run lint` | Lint codebase |
+| Command                 | Description              |
+| ----------------------- | ------------------------ |
+| `npm run dev`           | Start development server |
+| `npm run build`         | Build for production     |
+| `npm run preview`       | Preview production build |
+| `npm run test`          | Run unit tests           |
+| `npm run test:coverage` | Run tests with coverage  |
+| `npm run lint`          | Lint codebase            |
 
 ---
 

@@ -1,51 +1,52 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import { VitePWA } from 'vite-plugin-pwa';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+      registerType: "autoUpdate",
+      includeAssets: ["favicon.ico", "robots.txt", "apple-touch-icon.png"],
       manifest: {
-        name: 'Postify Blog',
-        short_name: 'Postify',
-        description: 'Modern blog platformu - React, Redux Toolkit ve TanStack Query ile geliştirilmiş',
-        theme_color: '#007bff',
-        background_color: '#ffffff',
-        display: 'standalone',
-        orientation: 'portrait',
-        scope: '/Blog-app-with-React-and-Redux/',
-        start_url: '/Blog-app-with-React-and-Redux/',
+        name: "Postify Blog",
+        short_name: "Postify",
+        description:
+          "Modern blog platformu - React, Redux Toolkit ve TanStack Query ile geliştirilmiş",
+        theme_color: "#007bff",
+        background_color: "#ffffff",
+        display: "standalone",
+        orientation: "portrait",
+        scope: "/Blog-app-with-React-and-Redux/",
+        start_url: "/Blog-app-with-React-and-Redux/",
         icons: [
           {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
+            src: "pwa-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
           },
           {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
+            src: "pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
           },
           {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable',
+            src: "pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any maskable",
           },
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/jsonplaceholder\.typicode\.com\/.*/i,
-            handler: 'CacheFirst',
+            handler: "CacheFirst",
             options: {
-              cacheName: 'api-cache',
+              cacheName: "api-cache",
               expiration: {
                 maxEntries: 100,
                 maxAgeSeconds: 60 * 60 * 24, // 24 hours
@@ -59,18 +60,18 @@ export default defineConfig({
       },
     }),
   ],
-  base: '/Blog-app-with-React-and-Redux/',
+  base: "/Blog-app-with-React-and-Redux/",
   build: {
-    outDir: 'docs',
-    assetsDir: 'assets',
+    outDir: "docs",
+    assetsDir: "assets",
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          redux: ['@reduxjs/toolkit', 'react-redux', 'redux-persist'],
-          query: ['@tanstack/react-query'],
-          editor: ['@tiptap/react', '@tiptap/starter-kit'],
-          charts: ['recharts'],
+          vendor: ["react", "react-dom", "react-router-dom"],
+          redux: ["@reduxjs/toolkit", "react-redux", "redux-persist"],
+          query: ["@tanstack/react-query"],
+          editor: ["@tiptap/react", "@tiptap/starter-kit"],
+          charts: ["recharts"],
         },
       },
     },
