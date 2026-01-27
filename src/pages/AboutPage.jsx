@@ -7,32 +7,28 @@ const AboutPage = () => {
   const { t } = useTranslation();
 
   const techStack = [
-    { icon: "⚛️", name: "React 19", desc: "UI Framework" },
-    { icon: "🔄", name: "Redux Toolkit", desc: "State Management" },
-    { icon: "🚀", name: "Vite", desc: "Build Tool" },
-    { icon: "💚", name: "Supabase", desc: "Backend" },
-    { icon: "🎨", name: "Framer Motion", desc: "Animations" },
-    { icon: "✨", name: "GSAP", desc: "Scroll Effects" },
+    { name: "React 19", desc: "UI Framework" },
+    { name: "Redux Toolkit", desc: "State Management" },
+    { name: "Vite", desc: "Build Tool" },
+    { name: "Supabase", desc: "Backend" },
+    { name: "Framer Motion", desc: "Animations" },
+    { name: "GSAP", desc: "Scroll Effects" },
   ];
 
   const features = [
     {
-      icon: "📝",
       title: t('about.features.blog') || "Blog Posts",
       desc: t('about.features.blogDesc') || "Create, edit and share your thoughts",
     },
     {
-      icon: "🔐",
       title: t('about.features.auth') || "Authentication",
       desc: t('about.features.authDesc') || "Secure login with Supabase",
     },
     {
-      icon: "🌙",
       title: t('about.features.theme') || "Dark Mode",
       desc: t('about.features.themeDesc') || "Easy on the eyes",
     },
     {
-      icon: "🌍",
       title: t('about.features.i18n') || "Multi-language",
       desc: t('about.features.i18nDesc') || "Turkish & English support",
     },
@@ -88,7 +84,6 @@ const AboutPage = () => {
                 rel="noopener noreferrer"
                 className={styles.socialLink}
               >
-                <span className={styles.socialIcon}>🐙</span>
                 GitHub
               </a>
               <a
@@ -97,7 +92,6 @@ const AboutPage = () => {
                 rel="noopener noreferrer"
                 className={styles.socialLink}
               >
-                <span className={styles.socialIcon}>💼</span>
                 LinkedIn
               </a>
             </div>
@@ -112,7 +106,6 @@ const AboutPage = () => {
           animate="visible"
         >
           <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>🛠️</span>
             {t('about.technologies')}
           </h2>
           <div className={styles.techGrid}>
@@ -123,7 +116,6 @@ const AboutPage = () => {
                 variants={itemVariants}
                 whileHover={{ scale: 1.02 }}
               >
-                <div className={styles.techIcon}>{tech.icon}</div>
                 <div className={styles.techName}>{tech.name}</div>
                 <div className={styles.techDesc}>{tech.desc}</div>
               </motion.div>
@@ -139,7 +131,6 @@ const AboutPage = () => {
           animate="visible"
         >
           <h2 className={styles.sectionTitle}>
-            <span className={styles.sectionIcon}>✨</span>
             {t('about.featuresTitle') || "Features"}
           </h2>
           <div className={styles.featuresGrid}>
@@ -150,7 +141,6 @@ const AboutPage = () => {
                 variants={itemVariants}
                 whileHover={{ scale: 1.01 }}
               >
-                <div className={styles.featureIcon}>{feature.icon}</div>
                 <h3 className={styles.featureTitle}>{feature.title}</h3>
                 <p className={styles.featureDesc}>{feature.desc}</p>
               </motion.div>
