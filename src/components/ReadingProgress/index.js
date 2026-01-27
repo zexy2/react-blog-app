@@ -1,1 +1,1 @@
-export { default } from './ReadingProgress';
+export { default } from "./ReadingProgress";

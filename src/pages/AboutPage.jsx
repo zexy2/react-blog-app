@@ -1,103 +1,183 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { motion } from "framer-motion";
+import styles from "./AboutPage.module.css";
 
 const AboutPage = () => {
   const { t } = useTranslation();
-  
+
+  const techStack = [
+    { icon: "⚛️", name: "React 19", desc: "UI Framework" },
+    { icon: "🔄", name: "Redux Toolkit", desc: "State Management" },
+    { icon: "🚀", name: "Vite", desc: "Build Tool" },
+    { icon: "💚", name: "Supabase", desc: "Backend" },
+    { icon: "🎨", name: "Framer Motion", desc: "Animations" },
+    { icon: "✨", name: "GSAP", desc: "Scroll Effects" },
+  ];
+
+  const features = [
+    {
+      icon: "📝",
+      title: t('about.features.blog') || "Blog Posts",
+      desc: t('about.features.blogDesc') || "Create, edit and share your thoughts",
+    },
+    {
+      icon: "🔐",
+      title: t('about.features.auth') || "Authentication",
+      desc: t('about.features.authDesc') || "Secure login with Supabase",
+    },
+    {
+      icon: "🌙",
+      title: t('about.features.theme') || "Dark Mode",
+      desc: t('about.features.themeDesc') || "Easy on the eyes",
+    },
+    {
+      icon: "🌍",
+      title: t('about.features.i18n') || "Multi-language",
+      desc: t('about.features.i18nDesc') || "Turkish & English support",
+    },
+  ];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <div className="container" style={{ marginTop: 32, marginBottom: 32 }}>
-      <div
-        style={{
-          background: "var(--bg-secondary)",
-          borderRadius: 18,
-          boxShadow: "0 2px 12px var(--shadow-color)",
-          padding: "32px 28px",
-        }}
-      >
-        <h1 style={{ fontWeight: 800, fontSize: "2.2rem", marginBottom: 24 }}>
-          {t('about.title')}
-        </h1>
-        <div
-          style={{
-            fontSize: "1.1rem",
-            lineHeight: 1.7,
-            color: "var(--text-secondary)",
-          }}
+    <div className={styles.aboutPage}>
+      <div className={styles.container}>
+        {/* Hero Section */}
+        <motion.div
+          className={styles.hero}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          <p style={{ marginBottom: 24 }}>
-            {t('about.description')}
-          </p>
-          <div style={{ marginBottom: 24 }}>
-            <h3
-              style={{
-                fontWeight: 700,
-                fontSize: "1.3rem",
-                marginBottom: 12,
-                color: "var(--text-primary)",
-              }}
-            >
-              {t('about.technologies')}:
-            </h3>
-            <ul style={{ listStyle: "none", padding: 0 }}>
-              <li
-                style={{
-                  padding: "8px 0",
-                  fontSize: "1.05rem",
-                  color: "var(--text-secondary)",
-                }}
-              >
-                • React
-              </li>
-              <li
-                style={{
-                  padding: "8px 0",
-                  fontSize: "1.05rem",
-                  color: "var(--text-secondary)",
-                }}
-              >
-                • React Router
-              </li>
-              <li
-                style={{
-                  padding: "8px 0",
-                  fontSize: "1.05rem",
-                  color: "var(--text-secondary)",
-                }}
-              >
-                • Axios
-              </li>
-              <li
-                style={{
-                  padding: "8px 0",
-                  fontSize: "1.05rem",
-                  color: "var(--text-secondary)",
-                }}
-              >
-                • JSONPlaceholder API
-              </li>
-            </ul>
+          <h1 className={styles.heroTitle}>{t('about.title')}</h1>
+          <p className={styles.heroSubtitle}>{t('about.description')}</p>
+        </motion.div>
+
+        {/* Developer Card */}
+        <motion.div
+          className={styles.developerCard}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          <div className={styles.avatarWrapper}>
+            <div className={styles.avatar}>ZA</div>
           </div>
-          <div
-            style={{
-              background: "var(--bg-primary)",
-              padding: "20px",
-              borderRadius: 12,
-              borderLeft: "4px solid #007bff",
-            }}
-          >
-            <p style={{ margin: 0, fontWeight: 600, color: "#007bff" }}>
-              {t('about.projectOwner')}:{" "}
+          <div className={styles.developerInfo}>
+            <h2 className={styles.developerName}>Zeki Akgül</h2>
+            <p className={styles.developerRole}>Full Stack Developer</p>
+            <p className={styles.developerBio}>
+              {t('about.bio') || "Passionate about creating modern web applications with clean code and great user experiences."}
+            </p>
+            <div className={styles.socialLinks}>
               <a
                 href="https://github.com/zexy2"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: "#007bff", textDecoration: "underline" }}
+                className={styles.socialLink}
               >
-                zexy2 (Zeki Akgül)
+                <span className={styles.socialIcon}>🐙</span>
+                GitHub
               </a>
-            </p>
+              <a
+                href="https://www.linkedin.com/in/zeki-akgül"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialLink}
+              >
+                <span className={styles.socialIcon}>💼</span>
+                LinkedIn
+              </a>
+            </div>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Tech Stack */}
+        <motion.section
+          className={styles.techSection}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <h2 className={styles.sectionTitle}>
+            <span className={styles.sectionIcon}>🛠️</span>
+            {t('about.technologies')}
+          </h2>
+          <div className={styles.techGrid}>
+            {techStack.map((tech, index) => (
+              <motion.div
+                key={tech.name}
+                className={styles.techCard}
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className={styles.techIcon}>{tech.icon}</div>
+                <div className={styles.techName}>{tech.name}</div>
+                <div className={styles.techDesc}>{tech.desc}</div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Features */}
+        <motion.section
+          className={styles.featuresSection}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <h2 className={styles.sectionTitle}>
+            <span className={styles.sectionIcon}>✨</span>
+            {t('about.featuresTitle') || "Features"}
+          </h2>
+          <div className={styles.featuresGrid}>
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                className={styles.featureCard}
+                variants={itemVariants}
+                whileHover={{ scale: 1.01 }}
+              >
+                <div className={styles.featureIcon}>{feature.icon}</div>
+                <h3 className={styles.featureTitle}>{feature.title}</h3>
+                <p className={styles.featureDesc}>{feature.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Stats */}
+        <motion.div
+          className={styles.statsSection}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <div className={styles.statCard}>
+            <div className={styles.statNumber}>100+</div>
+            <div className={styles.statLabel}>{t('about.stats.commits') || "Commits"}</div>
+          </div>
+          <div className={styles.statCard}>
+            <div className={styles.statNumber}>15+</div>
+            <div className={styles.statLabel}>{t('about.stats.components') || "Components"}</div>
+          </div>
+          <div className={styles.statCard}>
+            <div className={styles.statNumber}>2</div>
+            <div className={styles.statLabel}>{t('about.stats.languages') || "Languages"}</div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
