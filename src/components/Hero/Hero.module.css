@@ -20,57 +20,97 @@
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  background: radial-gradient(ellipse at 20% 50%, rgba(0, 255, 136, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 20%, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 80%, rgba(0, 200, 255, 0.06) 0%, transparent 50%);
 }
 
 .gradientOrb1,
 .gradientOrb2,
-.gradientOrb3 {
+.gradientOrb3,
+.gradientOrb4 {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.6;
-  animation: float 20s ease-in-out infinite;
+  filter: blur(60px);
+  opacity: 0.7;
+  will-change: transform;
 }
 
 .gradientOrb1 {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-  top: -20%;
-  left: -10%;
-  animation-delay: 0s;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #00ff88 0%, transparent 70%);
+  top: -15%;
+  left: -5%;
+  animation: floatOrb1 8s ease-in-out infinite;
 }
 
 .gradientOrb2 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
-  top: 20%;
-  right: -15%;
-  animation-delay: -7s;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, #8a2be2 0%, transparent 70%);
+  top: 10%;
+  right: -10%;
+  animation: floatOrb2 10s ease-in-out infinite;
 }
 
 .gradientOrb3 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-  bottom: -10%;
-  left: 30%;
-  animation-delay: -14s;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, #00c8ff 0%, transparent 70%);
+  bottom: -5%;
+  left: 25%;
+  animation: floatOrb3 12s ease-in-out infinite;
 }
 
-@keyframes float {
+.gradientOrb4 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #ff6b9d 0%, transparent 70%);
+  top: 40%;
+  left: 60%;
+  animation: floatOrb4 9s ease-in-out infinite;
+}
+
+@keyframes floatOrb1 {
   0%, 100% {
     transform: translate(0, 0) scale(1);
   }
-  25% {
-    transform: translate(30px, -30px) scale(1.05);
+  33% {
+    transform: translate(80px, 40px) scale(1.1);
+  }
+  66% {
+    transform: translate(-40px, 80px) scale(0.9);
+  }
+}
+
+@keyframes floatOrb2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-60px, 60px) scale(1.15);
+  }
+  66% {
+    transform: translate(40px, -40px) scale(0.85);
+  }
+}
+
+@keyframes floatOrb3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
   }
   50% {
-    transform: translate(-20px, 20px) scale(0.95);
+    transform: translate(100px, -60px) scale(1.2);
   }
-  75% {
-    transform: translate(20px, 10px) scale(1.02);
+}
+
+@keyframes floatOrb4 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate(-80px, -40px) rotate(180deg) scale(1.1);
   }
 }
 
@@ -215,24 +255,30 @@
 
   .gradientOrb1,
   .gradientOrb2,
-  .gradientOrb3 {
-    filter: blur(60px);
-    opacity: 0.4;
+  .gradientOrb3,
+  .gradientOrb4 {
+    filter: blur(50px);
+    opacity: 0.5;
   }
 
   .gradientOrb1 {
-    width: 300px;
-    height: 300px;
-  }
-
-  .gradientOrb2 {
     width: 250px;
     height: 250px;
   }
 
-  .gradientOrb3 {
+  .gradientOrb2 {
     width: 200px;
     height: 200px;
+  }
+
+  .gradientOrb3 {
+    width: 180px;
+    height: 180px;
+  }
+
+  .gradientOrb4 {
+    width: 150px;
+    height: 150px;
   }
 
   .subtitle {
@@ -248,7 +294,8 @@
 @media (prefers-reduced-motion: reduce) {
   .gradientOrb1,
   .gradientOrb2,
-  .gradientOrb3 {
+  .gradientOrb3,
+  .gradientOrb4 {
     animation: none;
   }
 

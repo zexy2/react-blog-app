@@ -104,6 +104,7 @@ export default function Hero({
         <div className={styles.gradientOrb1} />
         <div className={styles.gradientOrb2} />
         <div className={styles.gradientOrb3} />
+        <div className={styles.gradientOrb4} />
       </div>
 
       {/* Content */}
