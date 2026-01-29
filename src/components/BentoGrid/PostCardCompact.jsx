@@ -28,7 +28,7 @@ export default function PostCardCompact({ post, isBookmarked, onBookmarkToggle }
           </button>
         </div>
         
-        <Link to={`/post/${id}`} className={styles.titleLink}>
+        <Link to={`/posts/${id}`} className={styles.titleLink}>
           <h4 className={styles.compactTitle}>{title}</h4>
         </Link>
         

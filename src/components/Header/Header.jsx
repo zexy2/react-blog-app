@@ -3,10 +3,10 @@
  * Main navigation header with search, theme toggle, and language switcher
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FiPlus, FiBookmark, FiBarChart2, FiGithub, FiUser, FiLogIn, FiLogOut } from 'react-icons/fi';
+import { FiPlus, FiBookmark, FiBarChart2, FiGithub, FiUser, FiLogIn, FiLogOut, FiShield } from 'react-icons/fi';
 import { useSelector } from 'react-redux';
 
 import styles from './Header.module.css';
@@ -14,17 +14,32 @@ import { useTheme } from '../../hooks/useTheme';
 import { useSearch } from '../../hooks/useSearch';
 import { useBookmarks } from '../../hooks/useBookmarks';
 import { useAuth } from '../../hooks/useAuth';
+import { localAuthService } from '../../services/localAuthService';
 import LanguageSwitcher from '../LanguageSwitcher';
 
 const Header = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const { theme, toggle: toggleTheme } = useTheme();
   const { query, setQuery } = useSearch();
   const { bookmarksCount } = useBookmarks();
   const { isAuthenticated, user, logout: handleLogout } = useAuth();
+
+  // Check if user is admin
+  useEffect(() => {
+    const checkAdmin = async () => {
+      if (isAuthenticated) {
+        const adminStatus = await localAuthService.isAdmin();
+        setIsAdmin(adminStatus);
+      } else {
+        setIsAdmin(false);
+      }
+    };
+    checkAdmin();
+  }, [isAuthenticated, user]);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
@@ -125,6 +140,16 @@ const Header = () => {
               {/* Auth Links */}
               {isAuthenticated ? (
                 <>
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      className={`${styles.adminLink} ${isActive('/admin') ? styles.active : ''}`}
+                      onClick={closeMenu}
+                      title="Admin Panel"
+                    >
+                      <FiShield size={18} />
+                    </Link>
+                  )}
                   <Link
                     to="/profile"
                     className={`${styles.iconLink} ${isActive('/profile') ? styles.active : ''}`}

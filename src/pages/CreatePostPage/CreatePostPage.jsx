@@ -6,15 +6,28 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSelector, useDispatch } from 'react-redux';
 import RichTextEditor from '../../components/RichTextEditor';
 import { useCreatePost } from '../../hooks/usePosts';
 import { EDITOR_CONFIG } from '../../constants';
+import { 
+  selectAIEnabled, 
+  selectGhostCompletionEnabled, 
+  toggleAI,
+  isAIAvailable 
+} from '../../features/ai-assistant';
 import styles from './CreatePostPage.module.css';
 
 const CreatePostPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const createPost = useCreatePost();
+
+  // AI state
+  const aiEnabled = useSelector(selectAIEnabled);
+  const ghostEnabled = useSelector(selectGhostCompletionEnabled);
+  const aiAvailable = isAIAvailable();
 
   const [formData, setFormData] = useState({
     title: '',
@@ -124,10 +137,25 @@ const CreatePostPage = () => {
 
           {/* Content Editor */}
           <div className={styles.formGroup}>
-            <label className={styles.label}>
-              {t('posts.postContent')}
-              <span className={styles.required}>*</span>
-            </label>
+            <div className={styles.labelRow}>
+              <label className={styles.label}>
+                {t('posts.postContent')}
+                <span className={styles.required}>*</span>
+              </label>
+              {/* AI Toggle */}
+              {aiAvailable && (
+                <button
+                  type="button"
+                  onClick={() => dispatch(toggleAI())}
+                  className={`${styles.aiToggle} ${aiEnabled ? styles.aiActive : ''}`}
+                  title={aiEnabled ? 'AI Asistan Açık' : 'AI Asistan Kapalı'}
+                >
+                  <span className={styles.aiIcon}>✨</span>
+                  <span className={styles.aiLabel}>AI</span>
+                  <span className={`${styles.aiDot} ${aiEnabled ? styles.on : ''}`}></span>
+                </button>
+              )}
+            </div>
             <RichTextEditor
               content=""
               onChange={handleEditorChange}

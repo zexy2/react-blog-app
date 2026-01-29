@@ -10,14 +10,14 @@ import styles from './PostCards.module.css';
 export default function PostCardFeatured({ post, isBookmarked, onBookmarkToggle }) {
   const { id, title, body, userId } = post;
   
-  // Generate a gradient based on post id for visual variety
+  // Linear style: subtle dark gradients only
   const gradientIndex = id % 5;
   const gradients = [
-    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-    'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-    'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+    'linear-gradient(135deg, #1a1a1f 0%, #0d0d0f 100%)',
+    'linear-gradient(135deg, #18181c 0%, #0f0f12 100%)',
+    'linear-gradient(135deg, #1c1c22 0%, #101014 100%)',
+    'linear-gradient(135deg, #191920 0%, #0e0e11 100%)',
+    'linear-gradient(135deg, #1b1b21 0%, #0c0c0e 100%)',
   ];
 
   return (
@@ -44,7 +44,7 @@ export default function PostCardFeatured({ post, isBookmarked, onBookmarkToggle 
           </span>
         </div>
         
-        <Link to={`/post/${id}`} className={styles.titleLink}>
+        <Link to={`/posts/${id}`} className={styles.titleLink}>
           <h2 className={styles.featuredTitle}>{title}</h2>
         </Link>
         
@@ -53,7 +53,7 @@ export default function PostCardFeatured({ post, isBookmarked, onBookmarkToggle 
         </p>
         
         <div className={styles.actions}>
-          <Link to={`/post/${id}`} className={styles.readMore}>
+          <Link to={`/posts/${id}`} className={styles.readMore}>
             Read Article
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M5 12h14M12 5l7 7-7 7" />

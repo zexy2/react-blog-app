@@ -11,21 +11,47 @@
   padding: var(--space-xl) 0;
 }
 
-/* Grid Items */
+/* Grid Items - Linear Style with Gradient Border */
 .item {
   position: relative;
   border-radius: var(--radius-xl);
   overflow: hidden;
   background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
+  border: none;
   transition: all var(--transition-base);
   will-change: transform;
 }
 
+/* Gradient border effect */
+.item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(94, 106, 210, 0.15) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.5;
+  transition: opacity var(--transition-fast);
+  z-index: 1;
+}
+
+.item:hover::before {
+  opacity: 1;
+}
+
 .item:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-xl), var(--shadow-glow);
-  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 0 60px rgba(94, 106, 210, 0.1);
 }
 
 /* Featured - Large tile spanning 2 columns and 2 rows */

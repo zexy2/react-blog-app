@@ -22,7 +22,7 @@ export default function PostCardMedium({ post, isBookmarked, onBookmarkToggle })
           <span><FiClock size={12} /> 3 min</span>
         </div>
         
-        <Link to={`/post/${id}`} className={styles.titleLink}>
+        <Link to={`/posts/${id}`} className={styles.titleLink}>
           <h3 className={styles.mediumTitle}>{title}</h3>
         </Link>
         
@@ -31,7 +31,7 @@ export default function PostCardMedium({ post, isBookmarked, onBookmarkToggle })
         </p>
         
         <div className={styles.footer}>
-          <Link to={`/post/${id}`} className={styles.readLink}>
+          <Link to={`/posts/${id}`} className={styles.readLink}>
             Read more →
           </Link>
           

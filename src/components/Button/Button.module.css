@@ -63,16 +63,17 @@
   border-radius: var(--radius-lg);
 }
 
-/* Variants */
+/* Variants - Linear Style */
 .primary {
-  background: var(--gradient-primary);
-  color: white;
-  box-shadow: var(--shadow-sm);
+  background: #ffffff;
+  color: #000000;
+  box-shadow: none;
 }
 
 .primary:hover:not(:disabled) {
-  box-shadow: var(--shadow-md), 0 4px 16px rgba(59, 130, 246, 0.3);
-  transform: translateY(-2px);
+  background: #f4f5f8;
+  transform: translateY(-1px);
+  box-shadow: none;
 }
 
 .primary:active:not(:disabled) {
@@ -80,26 +81,27 @@
 }
 
 .secondary {
-  background: var(--bg-secondary);
+  background: transparent;
   color: var(--text-primary);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .secondary:hover:not(:disabled) {
-  background: var(--bg-tertiary);
-  border-color: var(--border-strong);
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
 }
 
 .outline {
   background: transparent;
-  color: var(--primary);
-  border: 2px solid var(--primary);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .outline:hover:not(:disabled) {
-  background: var(--primary-light);
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
 }
 
 .ghost {
@@ -115,25 +117,23 @@
 .danger {
   background: var(--error);
   color: white;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 
 .danger:hover:not(:disabled) {
   background: #dc2626;
-  box-shadow: var(--shadow-md), 0 4px 16px rgba(239, 68, 68, 0.3);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .success {
   background: var(--success);
   color: white;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
 }
 
 .success:hover:not(:disabled) {
   background: #059669;
-  box-shadow: var(--shadow-md), 0 4px 16px rgba(16, 185, 129, 0.3);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 /* Full Width */

@@ -19,6 +19,7 @@ const ProfilePage = () => {
   const { user, isAuthenticated, isLoading, updateProfile } = useAuth();
 
   const [isEditing, setIsEditing] = useState(false);
+  const [localLoading, setLocalLoading] = useState(true);
   const [formData, setFormData] = useState({
     full_name: '',
     username: '',
@@ -28,11 +29,29 @@ const ProfilePage = () => {
   });
   const [avatarUploading, setAvatarUploading] = useState(false);
 
+  // Debug log
+  console.log('ProfilePage state:', { user, isAuthenticated, isLoading });
+
+  // Timeout to prevent infinite loading
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    const timer = setTimeout(() => {
+      setLocalLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Update local loading when auth loading changes
+  useEffect(() => {
+    if (!isLoading) {
+      setLocalLoading(false);
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (!localLoading && !isAuthenticated) {
       navigate('/auth/login');
     }
-  }, [isLoading, isAuthenticated, navigate]);
+  }, [localLoading, isAuthenticated, navigate]);
 
   useEffect(() => {
     // Get profile from user.profile or user.user_metadata
@@ -76,7 +95,7 @@ const ProfilePage = () => {
     }
   };
 
-  if (isLoading) {
+  if (localLoading && !user) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner} />
@@ -84,7 +103,13 @@ const ProfilePage = () => {
     );
   }
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <div className={styles.loading}>
+        <p>Kullanıcı bulunamadı. Lütfen giriş yapın.</p>
+      </div>
+    );
+  }
 
   // Get profile data from user.profile or user.user_metadata as fallback
   const profile = user.profile || user.user_metadata || {};

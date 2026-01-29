@@ -20,6 +20,7 @@ import uiReducer from './slices/uiSlice';
 import postsReducer from './slices/postsSlice';
 import bookmarksReducer from './slices/bookmarksSlice';
 import userReducer from './slices/userSlice';
+import { aiReducer } from '../features/ai-assistant';
 
 // Combine all reducers
 const rootReducer = combineReducers({
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   posts: postsReducer,
   bookmarks: bookmarksReducer,
   user: userReducer,
+  ai: aiReducer,
 });
 
 // Persist configuration

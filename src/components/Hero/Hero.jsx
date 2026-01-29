@@ -1,12 +1,14 @@
 /**
  * Hero Component
- * Premium hero section with kinetic typography and gradient mesh background
+ * Premium hero section with animated background paths
+ * Inspired by 21st.dev components
  */
 
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import gsap from 'gsap';
-import SplitType from 'split-type';
+import { motion } from 'framer-motion';
+import BackgroundPaths from '../BackgroundPaths';
+import TextReveal from '../TextReveal';
 import styles from './Hero.module.css';
 
 export default function Hero({ 
@@ -18,107 +20,52 @@ export default function Hero({
 }) {
   const { t } = useTranslation();
   const heroRef = useRef(null);
-  const titleRef = useRef(null);
-  const subtitleRef = useRef(null);
   const searchRef = useRef(null);
 
   useEffect(() => {
-    // Check for reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    if (prefersReducedMotion) {
-      // Show content immediately without animation
-      if (titleRef.current) titleRef.current.style.opacity = '1';
-      if (subtitleRef.current) subtitleRef.current.style.opacity = '1';
-      if (searchRef.current) searchRef.current.style.opacity = '1';
-      return;
+    // Simple CSS-based fade-in
+    if (searchRef.current) {
+      searchRef.current.style.opacity = '1';
+      searchRef.current.style.transform = 'translateY(0)';
     }
-
-    const ctx = gsap.context(() => {
-      // Split title into characters for kinetic animation
-      if (titleRef.current) {
-        const splitTitle = new SplitType(titleRef.current, { 
-          types: 'chars',
-          tagName: 'span'
-        });
-
-        // Animate each character with stagger
-        gsap.fromTo(
-          splitTitle.chars,
-          { 
-            opacity: 0, 
-            y: 100,
-            rotateX: -90,
-          },
-          { 
-            opacity: 1, 
-            y: 0,
-            rotateX: 0,
-            duration: 0.8,
-            stagger: 0.03,
-            ease: 'power4.out',
-            delay: 0.2,
-          }
-        );
-      }
-
-      // Animate subtitle
-      if (subtitleRef.current) {
-        gsap.fromTo(
-          subtitleRef.current,
-          { opacity: 0, y: 30 },
-          { 
-            opacity: 1, 
-            y: 0, 
-            duration: 0.8, 
-            ease: 'power3.out',
-            delay: 0.6,
-          }
-        );
-      }
-
-      // Animate search bar
-      if (searchRef.current) {
-        gsap.fromTo(
-          searchRef.current,
-          { opacity: 0, y: 20, scale: 0.95 },
-          { 
-            opacity: 1, 
-            y: 0, 
-            scale: 1,
-            duration: 0.6, 
-            ease: 'power3.out',
-            delay: 0.9,
-          }
-        );
-      }
-    }, heroRef);
-
-    return () => ctx.revert();
   }, [title]);
 
   return (
     <section ref={heroRef} className={styles.hero}>
-      {/* Gradient mesh background */}
-      <div className={styles.gradientMesh} aria-hidden="true">
-        <div className={styles.gradientOrb1} />
-        <div className={styles.gradientOrb2} />
-        <div className={styles.gradientOrb3} />
-        <div className={styles.gradientOrb4} />
-      </div>
+      {/* Animated background paths - 21st.dev style */}
+      <BackgroundPaths />
+      
+      {/* Static gradient mesh background */}
+      <div className={styles.gradientMesh} aria-hidden="true" />
 
       {/* Content */}
       <div className={styles.content}>
-        <h1 ref={titleRef} className={styles.title}>
-          {title || t('home.title', 'Postify')}
-        </h1>
+        <motion.h1 
+          className={styles.title}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <TextReveal text={title || t('home.title', 'Postify')} />
+        </motion.h1>
         
-        <p ref={subtitleRef} className={styles.subtitle}>
+        <motion.p 
+          className={styles.subtitle}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        >
           {subtitle || t('home.subtitle', 'Discover stories, insights, and ideas')}
-        </p>
+        </motion.p>
 
         {showSearch && (
-          <div ref={searchRef} className={styles.searchWrapper}>
+          <motion.div 
+            ref={searchRef} 
+            className={styles.searchWrapper}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          >
             <div className={styles.searchContainer}>
               <svg 
                 className={styles.searchIcon} 
@@ -141,7 +88,7 @@ export default function Hero({
                 aria-label={t('home.searchLabel', 'Search posts')}
               />
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
 

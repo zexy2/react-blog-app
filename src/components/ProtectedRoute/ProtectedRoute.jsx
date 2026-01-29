@@ -4,14 +4,28 @@
  * Redirects to login if not authenticated
  */
 
+import { useState, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
+  const [timedOut, setTimedOut] = useState(false);
 
-  if (isLoading) {
+  // Timeout to prevent infinite loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTimedOut(true);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Debug
+  console.log('ProtectedRoute:', { isAuthenticated, isLoading, user: !!user, timedOut });
+
+  // If still loading and not timed out, show spinner
+  if (isLoading && !timedOut && !user) {
     return (
       <div style={{
         display: 'flex',
@@ -31,11 +45,13 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/auth/login" state={{ from: location }} replace />;
+  // If user exists, allow access
+  if (user || isAuthenticated) {
+    return children;
   }
 
-  return children;
+  // Otherwise redirect to login
+  return <Navigate to="/auth/login" state={{ from: location }} replace />;
 };
 
 export default ProtectedRoute;

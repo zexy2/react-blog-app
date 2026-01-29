@@ -1,10 +1,12 @@
 /**
  * AnalyticsPage Component
  * Dashboard with statistics and charts
+ * Enhanced with 21st.dev style components
  */
 
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 import {
   BarChart,
   Bar,
@@ -22,20 +24,27 @@ import {
 } from 'recharts';
 import { FiFileText, FiUsers, FiMessageSquare, FiTrendingUp } from 'react-icons/fi';
 import { usePosts } from '../../hooks/usePosts';
+import GlowingCard from '../../components/GlowingCard';
 import styles from './AnalyticsPage.module.css';
 
-const COLORS = ['#007bff', '#00c6ff', '#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#eab308', '#22c55e', '#14b8a6'];
+// Linear style monochrome colors
+const COLORS = ['#ffffff', '#e5e5e5', '#cccccc', '#b3b3b3', '#999999', '#808080', '#666666', '#4d4d4d', '#333333', '#1a1a1a'];
 
-const StatCard = ({ icon: Icon, label, value, color }) => (
-  <div className={styles.statCard}>
-    <div className={styles.statIcon} style={{ background: color }}>
-      <Icon size={24} />
+const StatCard = ({ icon: Icon, label, value, index = 0 }) => (
+  <motion.div 
+    className={styles.statCard}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: index * 0.1 }}
+  >
+    <div className={styles.statIcon}>
+      <Icon size={22} />
     </div>
     <div className={styles.statContent}>
       <span className={styles.statValue}>{value}</span>
       <span className={styles.statLabel}>{label}</span>
     </div>
-  </div>
+  </motion.div>
 );
 
 const AnalyticsPage = () => {
@@ -72,7 +81,7 @@ const AnalyticsPage = () => {
     const topAuthors = postsByAuthor.slice(0, 5);
 
     // Simulate posts over time data
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+    const months = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz'];
     const postsOverTime = months.map((month, index) => ({
       name: month,
       posts: Math.floor(posts.length / 6) + Math.floor(Math.random() * 5),
@@ -106,7 +115,7 @@ const AnalyticsPage = () => {
         <header className={styles.header}>
           <h1 className={styles.title}>{t('analytics.title')}</h1>
           <p className={styles.subtitle}>
-            {t('analytics.subtitle')}
+            Blog istatistiklerinizi ve performansınızı takip edin
           </p>
         </header>
 
@@ -116,25 +125,25 @@ const AnalyticsPage = () => {
             icon={FiFileText}
             label={t('analytics.totalPosts')}
             value={stats.totalPosts}
-            color="linear-gradient(135deg, #007bff, #00c6ff)"
+            index={0}
           />
           <StatCard
             icon={FiUsers}
             label={t('analytics.totalAuthors')}
             value={stats.totalAuthors}
-            color="linear-gradient(135deg, #6366f1, #8b5cf6)"
+            index={1}
           />
           <StatCard
             icon={FiMessageSquare}
             label={t('analytics.avgCommentsPerPost')}
             value={stats.avgPostsPerAuthor}
-            color="linear-gradient(135deg, #ec4899, #f43f5e)"
+            index={2}
           />
           <StatCard
             icon={FiTrendingUp}
             label="Trend"
             value="+12%"
-            color="linear-gradient(135deg, #22c55e, #14b8a6)"
+            index={3}
           />
         </div>
 
@@ -170,8 +179,8 @@ const AnalyticsPage = () => {
                   />
                   <defs>
                     <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#007bff" />
-                      <stop offset="100%" stopColor="#00c6ff" />
+                      <stop offset="0%" stopColor="#ffffff" />
+                      <stop offset="100%" stopColor="#808080" />
                     </linearGradient>
                   </defs>
                 </BarChart>
@@ -238,17 +247,17 @@ const AnalyticsPage = () => {
                   <Line
                     type="monotone"
                     dataKey="posts"
-                    stroke="#007bff"
+                    stroke="#ffffff"
                     strokeWidth={3}
-                    dot={{ fill: '#007bff', strokeWidth: 2 }}
+                    dot={{ fill: '#ffffff', strokeWidth: 2 }}
                     name="Yazılar"
                   />
                   <Line
                     type="monotone"
                     dataKey="views"
-                    stroke="#22c55e"
+                    stroke="#666666"
                     strokeWidth={3}
-                    dot={{ fill: '#22c55e', strokeWidth: 2 }}
+                    dot={{ fill: '#666666', strokeWidth: 2 }}
                     name="Görüntüleme"
                   />
                 </LineChart>

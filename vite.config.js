@@ -64,18 +64,15 @@ export default defineConfig({
   build: {
     outDir: "docs",
     assetsDir: "assets",
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
-          redux: ["@reduxjs/toolkit", "react-redux", "redux-persist"],
-          query: ["@tanstack/react-query"],
-          editor: ["@tiptap/react", "@tiptap/starter-kit"],
-          charts: ["recharts"],
-        },
+    sourcemap: false,
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
       },
     },
-    sourcemap: true,
+    chunkSizeWarningLimit: 1000,
   },
   server: {
     port: 5173,

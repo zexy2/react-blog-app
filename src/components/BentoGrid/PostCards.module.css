@@ -3,7 +3,7 @@
  * Styles for Featured, Medium, and Compact card variants
  */
 
-/* Base Card */
+/* Base Card - Linear Style */
 .card {
   position: relative;
   height: 100%;
@@ -11,7 +11,7 @@
   flex-direction: column;
   background: var(--bg-secondary);
   border-radius: var(--radius-xl);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .titleLink {
@@ -22,7 +22,8 @@
 .titleLink:hover h2,
 .titleLink:hover h3,
 .titleLink:hover h4 {
-  color: var(--primary);
+  color: var(--text-primary);
+  opacity: 0.8;
 }
 
 /* ============================================
@@ -140,8 +141,8 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: var(--gradient-primary);
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
   opacity: 0;
   transition: opacity var(--transition-fast);
 }
@@ -201,13 +202,13 @@
 .readLink {
   font-size: var(--text-sm);
   font-weight: 500;
-  color: var(--primary);
+  color: var(--text-secondary);
   text-decoration: none;
-  transition: opacity var(--transition-fast);
+  transition: color var(--transition-fast);
 }
 
 .readLink:hover {
-  opacity: 0.8;
+  color: var(--text-primary);
 }
 
 /* ============================================
@@ -238,15 +239,16 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: var(--space-xs) var(--space-sm);
-  background: var(--primary-light);
-  color: var(--primary);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-secondary);
   border-radius: var(--radius-sm);
   font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 [data-theme='dark'] .tag {
-  background: rgba(0, 255, 136, 0.15);
-  color: var(--primary);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
 }
 
 .compactTitle {
@@ -260,6 +262,7 @@
   flex-grow: 1;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
